@@ -1,0 +1,280 @@
+.section {
+  padding-block: clamp(48px, 6vw, 72px);
+}
+
+.wrap {
+  width: var(--container);
+  margin-inline: auto;
+  padding-inline: clamp(12px, 4vw, 24px);
+}
+
+/* ===== Hero ===== */
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(16px, 3vw, 32px);
+  align-items: start;
+}
+
+/* Media card */
+.mediaCard {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  box-shadow: var(--shadow-md);
+  padding: clamp(12px, 2.5vw, 20px);
+}
+
+.media {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 6px);
+  background: radial-gradient(
+      1200px 1200px at -10% -10%,
+      color-mix(in srgb, var(--brand-2) 10%, transparent),
+      transparent 40%
+    ),
+    radial-gradient(
+      1000px 1000px at 110% 110%,
+      color-mix(in srgb, var(--brand) 10%, transparent),
+      transparent 40%
+    ),
+    var(--card);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: clamp(12px, 2.5vw, 24px);
+}
+
+/* Thumbnails */
+.thumbs {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.thumbBtn {
+  appearance: none;
+  background: color-mix(in srgb, var(--card) 96%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  border-radius: 10px;
+  padding: 2px;
+  cursor: pointer;
+  min-width: 56px;
+  box-shadow: var(--shadow-sm);
+}
+.thumbBtn[aria-current="true"] {
+  border-color: color-mix(in srgb, var(--brand) 60%, var(--text) 10%);
+  outline: 3px solid var(--ring);
+  outline-offset: 1px;
+}
+.thumbImg {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Info card */
+.infoCard {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  box-shadow: var(--shadow-md);
+  padding: clamp(16px, 3vw, 28px);
+}
+
+.title {
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 2rem);
+  margin: 0 0 0.5rem;
+}
+
+.desc {
+  color: var(--muted);
+  margin: 0 0 1rem;
+  line-height: 1.55;
+}
+
+.badges {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0 0 1rem;
+}
+
+.badge {
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 40%, transparent);
+  background: color-mix(in srgb, var(--brand) 20%, var(--card));
+}
+
+.priceBlock {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.priceNow {
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.6rem);
+  font-weight: 800;
+}
+
+.priceWas {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.pct {
+  border-radius: 8px;
+  padding: 0.2rem 0.5rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: color-mix(in srgb, var(--brand-2) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand-2) 50%, transparent);
+}
+
+.ctaRow {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.btn {
+  position: relative; /* nødvendig for ::after-ringen */
+  padding: 0.95rem 1.25rem;
+  border-radius: 12px;
+  font-weight: 700;
+  background: var(--brand-2);
+  color: var(--text);
+
+  /* Tydelig kant med trygg farge (uten color-mix) */
+  border: 2px solid rgba(118, 113, 118, 0.12);
+
+  /* Dybde + subtil innvendig linje */
+  box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(78, 74, 74, 0.08);
+
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease,
+    transform 0.15s ease;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: -4px; /* hvor langt utenfor knappen ringen skal ligge */
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 0 0 3px var(--ring); /* bruk pastel-ringvariabelen din */
+}
+.btn:hover {
+  background: var(--brand);
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.btn:focus-visible {
+  outline: none; /* unngå dobbel ring */
+  /* forsterk ringen ved tastaturfokus */
+  /* litt tykkere i fokus: */
+}
+.btn:focus-visible::after {
+  inset: -5px;
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+.meta {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* ===== Reviews ===== */
+.reviews {
+  margin-top: clamp(32px, 6vw, 48px);
+}
+
+.reviewsCard {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  box-shadow: var(--shadow-md);
+  padding: clamp(16px, 3vw, 24px);
+}
+
+.reviews h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.4rem);
+}
+
+.reviewList {
+  display: grid;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reviewItem {
+  padding: 0.9rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  background: color-mix(in srgb, var(--card) 96%, transparent);
+}
+
+.reviewHead {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  font-weight: 700;
+}
+
+.rating {
+  font-weight: 700;
+}
+
+.loading,
+.error {
+  width: var(--container);
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  color: var(--muted);
+}
+.error {
+  color: #b00020;
+}
+
+/* ===== Responsiv ===== */
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .media {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 560px) {
+  .wrap {
+    padding-inline: clamp(12px, 6vw, 20px);
+  }
+  .btn {
+    width: 100%;
+  } /* lett å trykke på mobil */
+}

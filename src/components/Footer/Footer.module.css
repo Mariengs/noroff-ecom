@@ -45,8 +45,7 @@
   color: var(--muted);
 }
 
-/* Responsivt: komprimer på norske skjermer
-@media (max-width: 700px) {
+@media (max-width: 375px) {
   .inner {
     padding: 20px 12px;
   }
@@ -56,4 +55,4 @@
   .links a {
     padding: 6px 8px;
   }
-} */
+}
