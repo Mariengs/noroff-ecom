@@ -152,19 +152,14 @@
 }
 
 .btn {
-  position: relative; /* nødvendig for ::after-ringen */
+  position: relative;
   padding: 0.95rem 1.25rem;
   border-radius: 12px;
   font-weight: 700;
   background: var(--brand-2);
   color: var(--text);
-
-  /* Tydelig kant med trygg farge (uten color-mix) */
   border: 2px solid rgba(118, 113, 118, 0.12);
-
-  /* Dybde + subtil innvendig linje */
   box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(78, 74, 74, 0.08);
-
   cursor: pointer;
   transition: background 0.25s ease, border-color 0.25s ease,
     transform 0.15s ease;
@@ -173,10 +168,10 @@
 .btn::after {
   content: "";
   position: absolute;
-  inset: -4px; /* hvor langt utenfor knappen ringen skal ligge */
+  inset: -4px;
   border-radius: inherit;
   pointer-events: none;
-  box-shadow: 0 0 0 3px var(--ring); /* bruk pastel-ringvariabelen din */
+  box-shadow: 0 0 0 3px var(--ring);
 }
 .btn:hover {
   background: var(--brand);
@@ -188,9 +183,7 @@
 }
 
 .btn:focus-visible {
-  outline: none; /* unngå dobbel ring */
-  /* forsterk ringen ved tastaturfokus */
-  /* litt tykkere i fokus: */
+  outline: none;
 }
 .btn:focus-visible::after {
   inset: -5px;
