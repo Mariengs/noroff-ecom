@@ -1,0 +1,59 @@
+.footer {
+  margin-top: 40px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  backdrop-filter: saturate(140%) blur(8px);
+  box-shadow: var(--shadow);
+}
+
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  display: grid;
+  gap: 10px;
+  align-items: center;
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: var(--brand-strong);
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.links {
+  display: flex;
+  gap: 12px;
+}
+.links a {
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+.links a:hover {
+  background: rgba(167, 139, 250, 0.1);
+  box-shadow: 0 6px 14px rgba(167, 139, 250, 0.15);
+}
+
+.copy {
+  color: var(--muted);
+}
+
+/* Responsivt: komprimer på norske skjermer
+@media (max-width: 700px) {
+  .inner {
+    padding: 20px 12px;
+  }
+  .links {
+    gap: 6px;
+  }
+  .links a {
+    padding: 6px 8px;
+  }
+} */

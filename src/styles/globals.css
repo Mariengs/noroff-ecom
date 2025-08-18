@@ -1,0 +1,118 @@
+/* styles/globals.css */
+:root {
+  /* Pastell-palett */
+  --pastel-bg: linear-gradient(120deg, #f9f7ff 0%, #f6fff9 100%);
+  --surface: #ffffffcc; /* lett “glass” */
+  --border: #e9e5f5;
+  --shadow: 0 10px 30px rgba(89, 82, 122, 0.08);
+
+  --brand: #a78bfa; /* lavender */
+  --brand-strong: #8b5cf6;
+  --ink: #312e81; /* mørk, lilla-blå */
+  --muted: #6b7280; /* grå */
+  --accent-1: #93c5fd; /* sky */
+  --accent-2: #86efac; /* mint */
+  --accent-3: #fbcfe8; /* rosa */
+
+  --radius: 14px;
+  --space: 16px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    sans-serif;
+  color: var(--ink);
+  background: var(--pastel-bg);
+}
+
+a {
+  color: inherit;
+}
+
+/* en enkel container du kan gjenbruke */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+
+  /* Pastell-bakgrunn */
+  background: linear-gradient(135deg, #fef6ff, #f0f9ff, #f9f9ff);
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(167, 139, 250, 0.15);
+
+  /* Litt skygge for dybde */
+  box-shadow: 0 8px 18px rgba(167, 139, 250, 0.1);
+}
+
+/* Smalere container for Home */
+.container--narrow {
+  max-width: 1000px; /* styr bredden her */
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Kompakt produkt-grid (små kort, ikke full bredde) */
+.grid--products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* små kort */
+  gap: 14px; /* litt mindre gap */
+  background: linear-gradient(135deg, #fef6ff, #f0f9ff, #f9f9ff);
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(167, 139, 250, 0.15);
+  box-shadow: 0 6px 16px rgba(167, 139, 250, 0.08);
+}
+
+/* Litt typografi på Home-heading/undertittel (valgfritt) */
+.home-title {
+  margin: 0 0 6px;
+}
+.home-subtitle {
+  margin: 0 0 14px;
+  color: var(--muted, #6b7280);
+  font-size: 0.95rem;
+}
+
+/* Skeleton shimmer */
+@keyframes pastelShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    rgba(247, 244, 255, 0.9) 0%,
+    rgba(230, 249, 255, 0.9) 50%,
+    rgba(247, 244, 255, 0.9) 100%
+  );
+  background-size: 200% 100%;
+  animation: pastelShimmer 1.4s ease-in-out infinite;
+  border-radius: 10px;
+}

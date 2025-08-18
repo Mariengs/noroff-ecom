@@ -3,10 +3,10 @@ import Footer from "../Footer/Footer";
 
 export default function Layout({ children }) {
   return (
-    <div className="app-shell">
+    <>
       <Header />
-      <main className="container">{children}</main>
+      <main>{children}</main>
       <Footer />
-    </div>
+    </>
   );
 }
