@@ -1,21 +1,37 @@
-/* styles/globals.css */
 :root {
-  /* Pastell-palett */
-  --pastel-bg: linear-gradient(120deg, #f9f7ff 0%, #f6fff9 100%);
-  --surface: #ffffffcc; /* lett “glass” */
-  --border: #e9e5f5;
-  --shadow: 0 10px 30px rgba(89, 82, 122, 0.08);
+  /* Pastell – mer dempet palett */
+  --bg: #fbfbfe;
+  --surface: #ffffff;
+  --ink: #1b1f27;
+  --muted: #667085;
 
-  --brand: #a78bfa; /* lavender */
-  --brand-strong: #8b5cf6;
-  --ink: #312e81; /* mørk, lilla-blå */
-  --muted: #6b7280; /* grå */
-  --accent-1: #93c5fd; /* sky */
-  --accent-2: #86efac; /* mint */
-  --accent-3: #fbcfe8; /* rosa */
+  --lavender: #b8a8ff; /* aksent */
+  --mint: #aee6c5;
+  --blush: #ffdbe8;
+  --sky: #cfe8ff;
 
+  --brand: #9b8bf3; /* primær aksent */
+  --brand-strong: #7b68ee;
+
+  /* Rammer, radius, skygge */
+  --border: #eceaf6;
+  --radius-sm: 10px;
   --radius: 14px;
-  --space: 16px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 6px 16px rgba(23, 16, 53, 0.06);
+  --shadow: 0 14px 30px rgba(23, 16, 53, 0.08);
+
+  /* Spacing */
+  --space-1: 6px;
+  --space-2: 10px;
+  --space-3: 14px;
+  --space-4: 20px;
+  --space-5: 28px;
+  --space-6: 40px;
+
+  /* Bevegelse */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 180ms;
 }
 
 html,
@@ -23,96 +39,216 @@ body,
 #root {
   height: 100%;
 }
-
 body {
   margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial,
-    sans-serif;
+  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, Arial, sans-serif;
+  font-feature-settings: "ss01" 1, "ss02" 1; /* litt mer sofistikert former hvis fonten støtter */
   color: var(--ink);
-  background: var(--pastel-bg);
+  background: radial-gradient(
+      800px 400px at 10% 0%,
+      rgba(180, 160, 255, 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      800px 400px at 90% 10%,
+      rgba(206, 255, 232, 0.1),
+      transparent 65%
+    ),
+    var(--bg);
 }
 
 a {
   color: inherit;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
 }
 
-/* en enkel container du kan gjenbruke */
+/* Layout helpers */
 .container {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 var(--space-4);
 }
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-
-  /* Pastell-bakgrunn */
-  background: linear-gradient(135deg, #fef6ff, #f0f9ff, #f9f9ff);
-  padding: 20px;
-  border-radius: 16px;
-  border: 1px solid rgba(167, 139, 250, 0.15);
-
-  /* Litt skygge for dybde */
-  box-shadow: 0 8px 18px rgba(167, 139, 250, 0.1);
-}
-
-/* Smalere container for Home */
 .container--narrow {
-  max-width: 1000px; /* styr bredden her */
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 var(--space-4);
 }
 
-/* Kompakt produkt-grid (små kort, ikke full bredde) */
-.grid--products {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* små kort */
-  gap: 14px; /* litt mindre gap */
-  background: linear-gradient(135deg, #fef6ff, #f0f9ff, #f9f9ff);
-  padding: 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(167, 139, 250, 0.15);
-  box-shadow: 0 6px 16px rgba(167, 139, 250, 0.08);
+/* Seksjon-spacing */
+section {
+  padding-block: var(--space-5);
 }
 
-/* Litt typografi på Home-heading/undertittel (valgfritt) */
-.home-title {
-  margin: 0 0 6px;
+/* Overskrifter */
+h1,
+h2,
+h3 {
+  letter-spacing: 0.2px;
+}
+h1 {
+  font-size: 28px;
+  line-height: 1.2;
+  margin: 0 0 var(--space-1);
 }
 .home-subtitle {
-  margin: 0 0 14px;
-  color: var(--muted, #6b7280);
-  font-size: 0.95rem;
+  margin: 0 0 var(--space-3);
+  color: var(--muted);
 }
 
-/* Skeleton shimmer */
-@keyframes pastelShimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
+/* Pastellkort-grid (kompakt, men elegant) */
+.grid--products {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-3);
+  background: linear-gradient(135deg, #fff, #fbfcff);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Knapper – sans serif, ren kontur */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    rgba(207, 232, 255, 0.45),
+    rgba(174, 230, 197, 0.45)
+  );
+  border-color: var(--border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
-.skeleton {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(
-    90deg,
-    rgba(247, 244, 255, 0.9) 0%,
-    rgba(230, 249, 255, 0.9) 50%,
-    rgba(247, 244, 255, 0.9) 100%
-  );
-  background-size: 200% 100%;
-  animation: pastelShimmer 1.4s ease-in-out infinite;
-  border-radius: 10px;
+
+/* 🌙 Dark Pastel Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16161d;
+    --surface: #1e1f27;
+    --ink: #f3f4f7;
+    --muted: #a1a5b3;
+
+    --lavender: #b8a8ff; /* pastel aksenter funker fortsatt på mørkt */
+    --mint: #7ed9af;
+    --blush: #ffb6c9;
+    --sky: #9ecbff;
+
+    --brand: #b8a8ff;
+    --brand-strong: #9b8bf3;
+
+    --border: #2a2b36;
+    --shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.4);
+    --shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
+  }
+
+  body {
+    background: radial-gradient(
+        800px 400px at 10% 0%,
+        rgba(184, 168, 255, 0.08),
+        transparent 60%
+      ),
+      radial-gradient(
+        800px 400px at 90% 10%,
+        rgba(174, 230, 197, 0.08),
+        transparent 65%
+      ),
+      var(--bg);
+    color: var(--ink);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .brand {
+    background: linear-gradient(
+      135deg,
+      rgba(184, 168, 255, 0.18),
+      rgba(174, 230, 197, 0.18)
+    );
+    color: var(--ink);
+  }
+
+  .link:hover {
+    background: rgba(184, 168, 255, 0.12);
+  }
+
+  .active {
+    background: linear-gradient(
+      135deg,
+      rgba(155, 139, 243, 0.25),
+      rgba(174, 230, 197, 0.25)
+    );
+  }
+}
+
+/* Manuell override – høyere spesifisitet enn :root og media-regler */
+:root[data-theme="dark"] {
+  --bg: #16161d;
+  --surface: #1e1f27;
+  --ink: #f3f4f7;
+  --muted: #a1a5b3;
+
+  --lavender: #b8a8ff;
+  --mint: #7ed9af;
+  --blush: #ffb6c9;
+  --sky: #9ecbff;
+
+  --brand: #b8a8ff;
+  --brand-strong: #9b8bf3;
+
+  --border: #2a2b36;
+  --shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.4);
+  --shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
+}
+
+/* Viktig: vi trenger også en LIGHT override for å kunne tvinge lys
+   selv om systemet er i dark (media-regelen). */
+:root[data-theme="light"] {
+  --bg: #fbfbfe;
+  --surface: #ffffff;
+  --ink: #1b1f27;
+  --muted: #667085;
+
+  --lavender: #b8a8ff;
+  --mint: #aee6c5;
+  --blush: #ffdbe8;
+  --sky: #cfe8ff;
+
+  --brand: #9b8bf3;
+  --brand-strong: #7b68ee;
+
+  --border: #eceaf6;
+  --shadow-sm: 0 6px 16px rgba(23, 16, 53, 0.06);
+  --shadow: 0 14px 30px rgba(23, 16, 53, 0.08);
 }

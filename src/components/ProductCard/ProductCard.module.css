@@ -1,117 +1,81 @@
 .card {
-  border: 1px solid var(--border, #e9e5f5);
-  border-radius: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   overflow: hidden;
-  background: #fff;
+  background: var(--surface);
   display: grid;
-  box-shadow: 0 4px 12px rgba(137, 116, 255, 0.08);
-  transition: transform 0.12s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 .card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 18px rgba(137, 116, 255, 0.12);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 
-/* Mindre media-høyde */
 .media {
   position: relative;
-  background: linear-gradient(135deg, #f8f7ff, #f3fff7);
-  min-height: 120px;
+  background: linear-gradient(135deg, #f9f8ff, #f6fffb);
+  min-height: 110px;
   display: grid;
   place-items: center;
 }
 .media img {
   width: 100%;
-  height: 140px; /* ↓ mindre bilde */
+  height: 150px;
   object-fit: cover;
   display: block;
+  border-bottom: 1px solid var(--border);
 }
-
 .placeholder {
   width: 100%;
-  height: 140px;
-  background: radial-gradient(
-      80px 50px at 30% 40%,
-      rgba(167, 139, 250, 0.18),
-      transparent 60%
-    ),
-    radial-gradient(
-      90px 60px at 70% 60%,
-      rgba(134, 239, 172, 0.18),
-      transparent 60%
-    ),
-    #fafafa;
+  height: 150px;
+  background: #f7f7fb;
 }
 
 .badge {
   position: absolute;
-  top: 8px;
-  left: 8px;
+  top: 10px;
+  left: 10px;
   font-weight: 800;
   font-size: 11px;
-  color: #2b2b2b;
-  padding: 4px 6px;
+  color: #1e1f24;
+  padding: 4px 8px;
   border-radius: 999px;
   background: linear-gradient(
     135deg,
-    var(--accent-2, #86efac),
-    var(--accent-3, #fbcfe8)
+    rgba(174, 230, 197, 0.85),
+    rgba(255, 219, 232, 0.85)
   );
   border: 1px solid #fff;
-  box-shadow: 0 4px 10px rgba(251, 207, 232, 0.4);
+  box-shadow: 0 4px 10px rgba(23, 16, 53, 0.12);
 }
 
-/* Mer kompakt tekst/layout */
 .body {
   display: grid;
-  gap: 8px; /* ↓ mindre spacing */
-  padding: 10px; /* ↓ mindre padding */
+  gap: 8px;
+  padding: 12px;
 }
-
 .title {
   margin: 0;
-  font-size: 0.95rem; /* ↓ mindre font */
-  line-height: 1.3;
-  max-height: 2.6em;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  max-height: 2.5em;
   overflow: hidden;
 }
 
 .pricing {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 8px;
 }
 .now {
   font-weight: 800;
-  font-size: 0.95rem; /* ↓ litt mindre */
+  letter-spacing: 0.2px;
 }
 .was {
-  color: var(--muted, #6b7280);
+  color: var(--muted);
   text-decoration: line-through;
-  font-size: 0.85rem;
-}
-
-/* Mindre knapp */
-.button {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 10px; /* ↓ kompakt knapp */
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
   font-size: 0.9rem;
-  color: #2b2b2b;
-  border: 1px solid var(--border, #e9e5f5);
-  background: linear-gradient(
-    135deg,
-    rgba(147, 197, 253, 0.35),
-    rgba(134, 239, 172, 0.35)
-  );
-  transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-.button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(147, 197, 253, 0.2);
 }

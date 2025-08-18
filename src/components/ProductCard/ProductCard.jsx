@@ -42,7 +42,7 @@ export default function ProductCard({ product }) {
         </div>
 
         <Link
-          className={styles.button}
+          className={`btn btn-primary ${styles.button}`}
           to={`/product/${id}`}
           aria-label={`View ${title}`}
         >

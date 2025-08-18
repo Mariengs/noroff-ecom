@@ -2,23 +2,19 @@
   position: sticky;
   top: 0;
   z-index: 50;
-
-  /* “glass” over pastell-bakgrunnen */
-  backdrop-filter: saturate(140%) blur(8px);
-  background: var(--surface);
+  backdrop-filter: saturate(140%) blur(10px);
+  background: color-mix(in oklab, var(--surface) 85%, white 15%);
   border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-sm);
 }
-
 .nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-
   max-width: 1100px;
   margin: 0 auto;
-  padding: 12px 16px;
+  padding: 12px var(--space-4);
 }
 
 .brand {
@@ -26,98 +22,47 @@
   align-items: center;
   gap: 10px;
   font-weight: 800;
-  letter-spacing: 0.4px;
-  color: var(--brand-strong);
-  text-decoration: none;
+  letter-spacing: 0.3px;
+  color: var(--ink);
   padding: 8px 12px;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
-  color: #2b2b2b;
-  box-shadow: 0 6px 20px rgba(173, 128, 255, 0.12);
+  background: linear-gradient(
+    135deg,
+    rgba(184, 168, 255, 0.18),
+    rgba(174, 230, 197, 0.18)
+  );
+  border: 1px solid var(--border);
 }
-
-.brand::before {
-  content: "";
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: radial-gradient(
-      circle at 30% 30%,
-      #fff,
-      rgba(255, 255, 255, 0.2) 35%,
-      transparent 60%
-    ),
-    linear-gradient(135deg, var(--accent-1), var(--brand));
-  box-shadow: 0 0 0 2px #fff inset;
+.logo {
+  width: 24px;
+  height: 24px;
 }
 
 .links {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
-
-/* Felles link-stil */
 .link {
   position: relative;
   display: inline-flex;
   align-items: center;
   padding: 8px 12px;
-  border-radius: 10px;
-  text-decoration: none;
+  border-radius: var(--radius-sm);
   color: var(--ink);
   font-weight: 600;
-  transition: transform 0.12s ease, background-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: background var(--dur) var(--ease),
+    transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
-
-/* Subtil hover */
 .link:hover {
-  background: rgba(167, 139, 250, 0.1); /* lavendel-vask */
+  background: rgba(155, 139, 243, 0.12);
   transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(167, 139, 250, 0.15);
+  box-shadow: var(--shadow-sm);
 }
-
-/* Fokus for tastatur – god a11y */
-.link:focus-visible {
-  outline: 2px solid var(--accent-1);
-  outline-offset: 2px;
-}
-
-/* Aktiv rute (NavLink) */
 .active {
   background: linear-gradient(
     135deg,
-    rgba(147, 197, 253, 0.25),
-    rgba(134, 239, 172, 0.25)
+    rgba(200, 224, 255, 0.28),
+    rgba(174, 230, 197, 0.28)
   );
-  box-shadow: 0 6px 14px rgba(147, 197, 253, 0.18);
-}
-
-/* CartIcon skal passe inn uten kantforstyrrelser */
-.links :global(button) {
-  margin-left: 4px;
-}
-
-.logo {
-  width: 28px;
-  height: 28px;
-  margin-right: 8px;
-}
-
-/* Responsivt: komprimer på små skjermer */
-@media (max-width: 700px) {
-  .nav {
-    padding: 10px 12px;
-  }
-  .links {
-    gap: 6px;
-  }
-  .link {
-    padding: 8px 10px;
-  }
-  .brand {
-    padding: 6px 10px;
-    font-weight: 700;
-  }
 }

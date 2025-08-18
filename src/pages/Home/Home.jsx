@@ -48,7 +48,7 @@ export default function Home() {
 
   return (
     <section className="container--narrow">
-      <h1 className="home-title">Products</h1>
+      <h1>Products</h1>
       <p className="home-subtitle">Thoughtful products, quietly beautiful.</p>
 
       <SearchBar

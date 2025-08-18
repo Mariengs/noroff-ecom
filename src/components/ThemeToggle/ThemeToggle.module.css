@@ -1,0 +1,21 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease),
+    background 180ms var(--ease);
+}
+.toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.icon {
+  font-size: 16px;
+  line-height: 1;
+}
