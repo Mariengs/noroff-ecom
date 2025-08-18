@@ -1,3 +1,5 @@
+/* ====== Base (desktop / brede skjermer) ====== */
+
 .header {
   position: sticky;
   top: 0;
@@ -7,11 +9,14 @@
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
 }
+
+/* Bruk grid så vi enkelt kan “brekke” på små skjermer */
 .nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  column-gap: 12px;
+
   max-width: 1100px;
   margin: 0 auto;
   padding: 12px var(--space-4);
@@ -33,16 +38,21 @@
   );
   border: 1px solid var(--border);
 }
+
 .logo {
   width: 24px;
   height: 24px;
 }
 
+/* Høyre side: lenker + knapper på én linje når det er plass */
 .links {
+  justify-self: end;
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0; /* viktig for wrap senere */
 }
+
 .link {
   position: relative;
   display: inline-flex;
@@ -51,9 +61,11 @@
   border-radius: var(--radius-sm);
   color: var(--ink);
   font-weight: 600;
+  white-space: nowrap;
   transition: background var(--dur) var(--ease),
     transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
+
 .link:hover {
   background: rgba(155, 139, 243, 0.12);
   transform: translateY(-1px);
@@ -65,4 +77,61 @@
     rgba(200, 224, 255, 0.28),
     rgba(174, 230, 197, 0.28)
   );
+}
+
+/* Sørg for at ThemeToggle/CartIcon (buttons) matcher høyde visuelt */
+.links :global(button) {
+  height: 38px;
+  padding: 0 10px;
+}
+
+/* ====== Små skjermer ====== */
+@media (max-width: 700px) {
+  /* Stakk to rader: brand øverst, alt annet under */
+  .nav {
+    grid-template-columns: 1fr;
+    row-gap: 8px;
+    padding: 10px var(--space-4);
+  }
+
+  .brand {
+    padding: 6px 10px;
+    font-weight: 700;
+  }
+  .logo {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* La lenker/knapper wrappe pent på neste rad */
+  .links {
+    justify-self: stretch; /* strekk til full bredde */
+    justify-content: space-between;
+    flex-wrap: wrap; /* tillat linjebrekk */
+    gap: 6px 8px; /* rad/kolonne-gap */
+  }
+
+  .link {
+    padding: 8px 10px;
+    font-weight: 600;
+    flex: 0 1 auto; /* får lov å krympe */
+  }
+
+  /* gjør knappene litt smalere */
+  .links :global(button) {
+    height: 36px;
+    padding: 0 8px;
+  }
+}
+
+/* ====== Ekstra kompakt på veldig små skjermer ====== */
+@media (max-width: 380px) {
+  .link {
+    padding: 6px 8px;
+    font-size: 0.95rem;
+  }
+  .links :global(button) {
+    height: 34px;
+    padding: 0 6px;
+  }
 }
