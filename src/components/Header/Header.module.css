@@ -6,6 +6,7 @@
   background: color-mix(in oklab, var(--surface) 85%, white 15%);
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
 }
 
 .nav {
@@ -82,14 +83,13 @@
 
 @media (max-width: 700px) {
   .nav {
-    grid-template-columns: 1fr;
-    row-gap: 8px;
-    padding: 10px var(--space-4);
+    grid-template-columns: 1fr; /* brand på rad 1, links på rad 2 */
   }
 
   .brand {
-    padding: 6px 10px;
-    font-weight: 700;
+    justify-self: center; /* sentrer grid-item horisontalt */
+    text-align: center; /* hvis teksten bryter */
+    margin-bottom: 5px;
   }
   .logo {
     width: 20px;

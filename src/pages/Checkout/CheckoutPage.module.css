@@ -1,3 +1,31 @@
+/* ==== Sticky footer baseline (fikser iPad/nettbrett) ==== */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  min-height: 100svh; /* “small viewport” – bra på iOS/iPadOS */
+  min-height: 100dvh; /* moderne fallback for dynamiske UI-bars */
+  display: flex;
+  flex-direction: column;
+}
+
+/* La hovedinnholdet ta plassen, så footeren kan skyves ned */
+.page {
+  flex: 1 0 auto;
+}
+
+/* Dytt footer til bunnen når innholdet er kort */
+footer {
+  margin-top: auto;
+  padding-bottom: env(
+    safe-area-inset-bottom
+  ); /* trygg kant nederst på iPad/iPhone */
+}
+
+/* ==== Din eksisterende stil + våre mobiloverstyringer ==== */
+
 .page {
   display: grid;
   gap: 2rem;
@@ -213,7 +241,9 @@
 }
 
 .primaryLink {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 1rem;
   background: linear-gradient(135deg, #0ea5e9, #22c55e);
   color: white;
@@ -221,6 +251,7 @@
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
+  text-align: center;
 }
 
 .primaryLink:hover {
@@ -299,5 +330,112 @@
   :global([data-theme="dark"]) .remove,
   :global(:root:not([data-theme])) .remove {
     color: #f87171;
+  }
+}
+
+/* ==== Mobile-first forbedringer (overstyringer) ==== */
+
+/* Sørg for at lange ord/titler bryter og ikke skaper horisontal scrolling */
+.title {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Prislinjen kan bryte på mobil */
+.prices {
+  flex-wrap: wrap;
+}
+
+/* Bildet holder kvadratisk form som default (overstyres spesifikt på mobil) */
+.thumb,
+.thumbFallback {
+  aspect-ratio: 1 / 1;
+}
+
+/* Gjør checkout-knappen lettere å trykke på på mobil */
+.checkoutBtn {
+  width: 100%;
+}
+
+/* Ekstra kompakt padding på veldig smale skjermer */
+@media (max-width: 380px) {
+  .page {
+    padding: 1rem 0.75rem;
+  }
+}
+
+/* ——— Små skjermer: behold rad-layout for kompakte kort ——— */
+@media (max-width: 480px) {
+  .item {
+    flex-direction: row; /* behold rad-layout for kompakt høyde */
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .thumb,
+  .thumbFallback {
+    width: 72px; /* litt mindre bilde */
+    height: 72px;
+    flex-shrink: 0;
+  }
+
+  .info {
+    flex: 1; /* tekst får resten av bredden */
+    width: auto;
+  }
+
+  .controls {
+    flex-wrap: wrap; /* bryt ved behov, men bli ved siden av bildet */
+    gap: 0.5rem;
+  }
+
+  /* Linjetotal plasseres til høyre og nederst i innholdskolonnen */
+  .lineTotal {
+    margin-left: auto;
+    align-self: flex-end;
+    text-align: right;
+  }
+
+  /* Sticky summary kan skape “klistre”-kollisjon på mobil – slå av */
+  .checkoutSummary {
+    position: static;
+    top: auto;
+  }
+
+  /* Totalsum kan bryte penere */
+  .total {
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
+  }
+}
+
+/* ——— Mellomstore skjermer: litt mer luft, men behold 1-kolonne layout ——— */
+@media (min-width: 481px) and (max-width: 767px) {
+  .item {
+    gap: 0.75rem;
+  }
+
+  .thumb,
+  .thumbFallback {
+    width: 88px;
+    height: 88px;
+  }
+
+  .qtyBtn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ——— Desktop (som før) ——— */
+@media (min-width: 768px) {
+  .layout {
+    grid-template-columns: 2fr 1fr;
+    align-items: start;
+  }
+
+  .lineTotal {
+    align-self: center;
+    text-align: right;
   }
 }
