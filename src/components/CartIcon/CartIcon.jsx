@@ -12,7 +12,7 @@ export default function CartIcon() {
   const [floating, setFloating] = useState(false);
   const prevQty = useRef(totalQty);
 
-  // Bump ved endring i antall
+  // Bump
   useEffect(() => {
     if (totalQty !== prevQty.current) {
       setBump(true);
@@ -22,7 +22,7 @@ export default function CartIcon() {
     }
   }, [totalQty]);
 
-  // Toggle floating ved scroll
+  // Toggle floating scroll
   useEffect(() => {
     const onScroll = () => setFloating(window.scrollY > 150);
     onScroll();
@@ -56,7 +56,6 @@ export default function CartIcon() {
     </button>
   );
 
-  // Når floating = true, rendres i <body> så den ikke påvirkes av header-layout
   if (floating && typeof document !== "undefined") {
     return createPortal(Button, document.body);
   }

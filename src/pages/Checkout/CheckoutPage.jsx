@@ -1,4 +1,3 @@
-// src/pages/CheckoutPage/CheckoutPage.jsx
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { formatNOK } from "../../lib/pricing";

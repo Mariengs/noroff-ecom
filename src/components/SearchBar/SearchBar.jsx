@@ -1,4 +1,3 @@
-// src/components/SearchBar/SearchBar.jsx
 import { useNavigate } from "react-router-dom";
 import { useEffect, useId, useRef, useState } from "react";
 import styles from "./SearchBar.module.css";
@@ -82,7 +81,6 @@ export default function SearchBar({ value, onChange, results = [] }) {
           }
         />
 
-        {/* Clear-knapp til høyre for input */}
         {showClear && (
           <button
             type="button"

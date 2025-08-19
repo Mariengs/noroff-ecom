@@ -1,7 +1,7 @@
 .wrap {
   position: relative;
   display: inline-block;
-  margin: 0 0 1rem 0; /* litt luft under */
+  margin: 0 0 1rem 0;
 }
 
 .button {

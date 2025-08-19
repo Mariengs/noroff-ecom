@@ -1,6 +1,6 @@
 :root {
-  --cart-bg: #0ea5e9; /* samme som i header */
-  --cart-bg-2: #22c55e; /* samme som i header */
+  --cart-bg: #0ea5e9;
+  --cart-bg-2: #22c55e;
   --cart-text: #0b1220;
   --cart-ring: rgba(14, 165, 233, 0.35);
   --badge-bg-1: #f43f5e;
@@ -68,20 +68,16 @@
   animation: badge-pop 260ms ease-out;
 }
 
-/* Floating FAB – beholder samme bakgrunn som i header */
+/* Floating FAB  */
 .floating {
   position: fixed !important;
   right: 16px;
   bottom: 16px;
   z-index: 999;
-  width: 56px; /* større hit-area som FAB */
+  width: 56px;
   height: 56px;
-  border-radius: 16px; /* beholder samme “pill”-følelse (kan settes til 50% for rund) */
-  background: linear-gradient(
-    135deg,
-    var(--cart-bg),
-    var(--cart-bg-2)
-  ); /* <- viktig */
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--cart-bg), var(--cart-bg-2));
   border: 1px solid var(--border);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.2s ease,
@@ -89,7 +85,7 @@
   opacity: 1;
 }
 
-/* Bump når antall endrer seg */
+/* Bump  */
 .bump {
   animation: bump 450ms ease-out;
 }
@@ -126,7 +122,6 @@
   }
 }
 
-/* Redusert bevegelse */
 @media (prefers-reduced-motion: reduce) {
   .button,
   .button:hover,

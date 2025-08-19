@@ -1,10 +1,8 @@
-/* src/components/SearchBar/SearchBar.module.css */
-
 .wrap {
   position: relative;
   width: 100%;
   max-width: 420px;
-  margin: 0 auto 2rem auto; /* 👈 mer luft under søkefeltet */
+  margin: 0 auto 2rem auto;
 }
 
 .inputWrap {

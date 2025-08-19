@@ -1,4 +1,3 @@
-// src/components/ThemeToggle/ThemeToggle.jsx
 import { useEffect, useState } from "react";
 import styles from "./ThemeToggle.module.css";
 
@@ -10,20 +9,18 @@ function systemPrefersDark() {
 }
 
 export default function ThemeToggle() {
-  // Init: følg system ÉN gang, hvis ingenting lagret
   const [mode, setMode] = useState(() => {
     const saved = localStorage.getItem("theme");
     if (saved === "light" || saved === "dark") return saved;
     return systemPrefersDark() ? "dark" : "light";
   });
 
-  // Anvend valgt modus på <html> (bare light/dark – ingen system lenger)
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", mode);
     localStorage.setItem("theme", mode);
   }, [mode]);
 
-  // Toggle mellom light <-> dark
+  // Toggle light <-> dark
   function toggle() {
     setMode((m) => (m === "light" ? "dark" : "light"));
   }

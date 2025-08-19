@@ -67,7 +67,6 @@
   color: var(--ink);
 }
 
-/* Subtile kantlinjer per type */
 .success {
   border-color: color-mix(in srgb, #22c55e 38%, var(--border));
 }

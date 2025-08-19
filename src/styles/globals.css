@@ -1,5 +1,5 @@
 :root {
-  /* Pastell – mer dempet palett */
+  /* Pastell – dempet palett */
   --bg: #fbfbfe;
   --surface: #ffffff;
   --ink: #1b1f27;
@@ -11,7 +11,7 @@
   --sky: #cfe8ff;
 
   --brand: #9b8bf3; /* primær aksent */
-  --brand-2: #0ea5e9; /* SEKUNDÆR aksent (NY) */
+  --brand-2: #0ea5e9; /* SEKUNDÆR aksent */
   --brand-strong: #7b68ee;
 
   /* Rammer, radius, skygge */
@@ -161,7 +161,7 @@ h1 {
   }
 }
 
-/* 🌙 System Dark (gjelder når du ikke har satt data-theme selv) */
+/* System Dark (gjelder når du ikke har satt data-theme selv) */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #16161d;
@@ -175,7 +175,7 @@ h1 {
     --sky: #9ecbff;
 
     --brand: #b8a8ff;
-    --brand-2: #0ea5e9; /* NY */
+    --brand-2: #0ea5e9;
     --brand-strong: #9b8bf3;
 
     --border: #2a2b36;
@@ -239,7 +239,7 @@ h1 {
   --sky: #9ecbff;
 
   --brand: #b8a8ff;
-  --brand-2: #0ea5e9; /* NY */
+  --brand-2: #0ea5e9;
   --brand-strong: #9b8bf3;
 
   --border: #2a2b36;
@@ -259,7 +259,7 @@ h1 {
   --sky: #cfe8ff;
 
   --brand: #9b8bf3;
-  --brand-2: #0ea5e9; /* NY */
+  --brand-2: #0ea5e9;
   --brand-strong: #7b68ee;
 
   --border: #eceaf6;
@@ -267,14 +267,12 @@ h1 {
   --shadow: 0 14px 30px rgba(23, 16, 53, 0.08);
 }
 
-/* Fjern hvit bakgrunn/innramming bak kortene i dark-mode */
 :root[data-theme="dark"] .grid--products {
   background: none;
   border-color: color-mix(in srgb, var(--border) 55%, transparent);
   box-shadow: none;
 }
 
-/* Hvis brukeren følger systemtema (ingen data-theme settes) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) .grid--products {
     background: none;
@@ -283,14 +281,12 @@ h1 {
   }
 }
 
-/* === Tiny phones (≤375px): alltid litt ekstra luft og sentrering === */
 @media (max-width: 375px) {
   html,
   body {
     overflow-x: hidden;
   }
 
-  /* Alle vanlige containere hos deg */
   .container,
   .container--narrow,
   .page,
@@ -301,18 +297,15 @@ h1 {
     margin-inline: auto;
     box-sizing: border-box;
 
-    /* litt mer luft på høyre side */
     padding-inline-start: 18px;
     padding-inline-end: 26px;
   }
 
-  /* Produkt-grid får også litt mer pust */
   .grid--products {
     padding: 16px;
   }
 }
 
-/* Safe-area støtte (notch) når nettleseren kan det */
 @supports (padding: max(0px)) {
   @media (max-width: 375px) {
     .container,
