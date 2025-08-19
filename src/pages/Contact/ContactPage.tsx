@@ -1,64 +1,133 @@
-import { useId, useState } from "react";
+import { useId, useState, useEffect, useMemo, useRef } from "react";
 import s from "./ContactPage.module.css";
 
-function isEmail(v) {
+type FormValues = {
+  fullName: string;
+  subject: string;
+  email: string;
+  body: string; // message
+};
+
+type FormErrors = Partial<Record<keyof FormValues, string>>;
+type Toast = { type: "success" | "error"; message: string } | null;
+
+function isEmail(v: string): boolean {
   return /.+@.+\..+/.test(v);
+}
+
+function validate(v: FormValues): FormErrors {
+  const e: FormErrors = {};
+  if (!v.fullName || v.fullName.trim().length < 3)
+    e.fullName = "Full name must be at least 3 characters.";
+  if (!v.subject || v.subject.trim().length < 3)
+    e.subject = "Subject must be at least 3 characters.";
+  if (!v.email || !isEmail(v.email))
+    e.email = "Please enter a valid email address.";
+  if (!v.body || v.body.trim().length < 10)
+    e.body = "Message must be at least 10 characters.";
+  return e;
 }
 
 export default function ContactPage() {
   const id = useId();
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<FormValues>({
     fullName: "",
     subject: "",
     email: "",
     body: "",
   });
-  const [errors, setErrors] = useState({});
-  const [sent, setSent] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [sent, setSent] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [toast, setToast] = useState<Toast>(null);
 
-  function validate(v) {
-    const e = {};
-    if (!v.fullName || v.fullName.trim().length < 3)
-      e.fullName = "Full name must be at least 3 characters.";
-    if (!v.subject || v.subject.trim().length < 3)
-      e.subject = "Subject must be at least 3 characters.";
-    if (!v.email || !isEmail(v.email))
-      e.email = "Please enter a valid email address.";
-    if (!v.body || v.body.trim().length < 3)
-      e.body = "Message must be at least 3 characters.";
-    return e;
-  }
+  // 🔹 Referanse til toppen for smooth scroll + fokus
+  const topRef = useRef<HTMLDivElement>(null);
 
-  function handleChange(e) {
+  // 🔹 Disable-knapp når skjemaet har feil
+  const hasErrors = useMemo(
+    () => Object.keys(validate(values)).length > 0,
+    [values]
+  );
+
+  // Auto-hide toast etter 4s
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  useEffect(() => {
+    if (sent) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(() => topRef.current?.focus(), 50);
+    }
+  }, [sent, toast]);
+
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
+
     setErrors((prev) => {
       const next = { ...prev };
-      const temp = validate({ ...values, [name]: value });
-      delete next[name];
-      if (temp[name]) next[name] = temp[name];
+      const fieldErrors = validate({ ...values, [name]: value } as FormValues);
+      const key = name as keyof FormValues;
+      if (fieldErrors[key]) next[key] = fieldErrors[key];
+      else delete next[key];
       return next;
     });
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const eobj = validate(values);
     setErrors(eobj);
-    if (Object.keys(eobj).length === 0) {
-      try {
-        setSubmitting(true);
-        console.log("Contact form data:", values);
-        setSent(true);
-      } finally {
-        setSubmitting(false);
-      }
+
+    if (Object.keys(eobj).length > 0) {
+      setToast({
+        type: "error",
+        message: "Please fix the highlighted errors.",
+      });
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      // Send til API her om ønskelig
+      console.log("Contact form data:", values);
+      setSent(true);
+      setToast({ type: "success", message: "Message sent successfully!" });
+    } finally {
+      setSubmitting(false);
     }
   }
 
   return (
     <section className={`${s.section} ${sent ? s.sent : ""}`}>
+      {/* 🔹 Usynlig fokus-anker på toppen (for scroll & a11y) */}
+      <div
+        ref={topRef}
+        tabIndex={-1}
+        aria-hidden="true"
+        className={s.topAnchor}
+      />
+
+      {/* Toast (nå med bedre kontrast i mørkt tema via CSS) */}
+      {toast && (
+        <div
+          className={`${s.toast} ${
+            toast.type === "success" ? s.toastSuccess : s.toastError
+          }`}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {toast.message}
+        </div>
+      )}
+
       <div className={s.wrap}>
         <h1 className={s.title}>Contact</h1>
 
@@ -177,7 +246,7 @@ export default function ContactPage() {
                 <span className={s.helper}>We’ll only use this to reply.</span>
               </div>
 
-              {/* Body */}
+              {/* Message */}
               <div className={s.row}>
                 <label className={s.label} htmlFor={`${id}-body`}>
                   Message{" "}
@@ -191,7 +260,7 @@ export default function ContactPage() {
                   name="body"
                   value={values.body}
                   onChange={handleChange}
-                  minLength={3}
+                  minLength={10}
                   required
                   aria-invalid={Boolean(errors.body)}
                   aria-describedby={errors.body ? `${id}-body-err` : undefined}
@@ -209,7 +278,11 @@ export default function ContactPage() {
 
               {/* Actions */}
               <div className={s.actions}>
-                <button className={s.btn} type="submit" disabled={submitting}>
+                <button
+                  className={s.btn}
+                  type="submit"
+                  disabled={submitting || hasErrors}
+                >
                   {submitting ? "Sending…" : "Submit"}
                 </button>
               </div>

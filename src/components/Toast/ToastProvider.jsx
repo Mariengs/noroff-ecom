@@ -19,7 +19,7 @@ export function ToastProvider({ children }) {
   }, []);
 
   const push = useCallback(
-    ({ message, type = "info", duration = 2500, action }) => {
+    ({ message, type = "info", duration = 3000, action }) => {
       const id = ++idCounter;
       const toast = { id, message, type, duration, action };
       setToasts((curr) => [...curr, toast]);

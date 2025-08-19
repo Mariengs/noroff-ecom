@@ -130,3 +130,51 @@
     padding: 0.5rem 0.65rem;
   }
 }
+
+/* Top anchor (for scroll & fokus uten å påvirke layout) */
+.topAnchor {
+  position: relative;
+  width: 0;
+  height: 0;
+  outline: none;
+}
+
+/* Toast: fast plassert øverst – synlig på både lyst og mørkt tema */
+.toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  max-width: 420px;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  font-weight: 600;
+  z-index: 10000;
+  border: 1px solid transparent;
+  /* default (lyst tema) */
+  background: #ffffff;
+  color: #1a1a1a;
+  border-color: #e5e7eb;
+}
+
+/* Tilpass for mørkt tema (prefers-color-scheme) */
+@media (prefers-color-scheme: dark) {
+  .toast {
+    background: #111827; /* mørk grå/blå */
+    color: #f9fafb; /* nesten hvit */
+    border-color: #374151; /* mørk kant */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Semantiske varianter (kan overstyre bakgrunn/border litt) */
+.toastSuccess {
+  /* en lett grønn markering – funker også i dark pga base-farger over */
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.25);
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.toastError {
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.35);
+}

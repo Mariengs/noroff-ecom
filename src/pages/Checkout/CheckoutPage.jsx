@@ -2,10 +2,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { formatNOK } from "../../lib/pricing";
 import styles from "./CheckoutPage.module.css";
+import { useToast } from "../../components/Toast/ToastProvider";
 
 export default function CheckoutPage() {
-  const { items, inc, dec, remove, totalAmount } = useCart();
+  const { items, inc, dec, remove, addQty, totalAmount } = useCart();
   const navigate = useNavigate();
+  const toast = useToast();
 
   if (items.length === 0) {
     return (
@@ -80,14 +82,38 @@ export default function CheckoutPage() {
                       <button
                         type="button"
                         className={styles.qtyBtn}
-                        onClick={() => dec(i.id)}
+                        onClick={() => {
+                          const snapshot = { ...i }; // før endring
+                          dec(i.id);
+                          if (snapshot.qty > 1) {
+                            // bare -1
+                            toast.info(`Removed 1 × ${snapshot.title}`, {
+                              duration: 3000,
+                              action: {
+                                label: "Undo",
+                                onClick: () => inc(snapshot.id),
+                              },
+                            });
+                          } else {
+                            // gikk til 0 -> fjernet vare
+                            toast.error(`${snapshot.title} removed from cart`, {
+                              duration: 4000,
+                              action: {
+                                label: "Undo",
+                                onClick: () => addQty(snapshot, 1),
+                              },
+                            });
+                          }
+                        }}
                         aria-label={`Decrease quantity of ${i.title}`}
                       >
                         −
                       </button>
+
                       <span className={styles.qtyValue} aria-live="polite">
                         {i.qty}
                       </span>
+
                       <button
                         type="button"
                         className={styles.qtyBtn}
@@ -101,7 +127,17 @@ export default function CheckoutPage() {
                     <button
                       type="button"
                       className={styles.remove}
-                      onClick={() => remove(i.id)}
+                      onClick={() => {
+                        const snapshot = { ...i };
+                        remove(i.id);
+                        toast.error(`${snapshot.title} removed from cart`, {
+                          duration: 4000,
+                          action: {
+                            label: "Undo",
+                            onClick: () => addQty(snapshot, snapshot.qty),
+                          },
+                        });
+                      }}
                       aria-label={`Remove ${i.title} from cart`}
                     >
                       Remove
@@ -125,7 +161,10 @@ export default function CheckoutPage() {
           <button
             type="button"
             className={styles.checkoutBtn}
-            onClick={() => navigate("/success")}
+            onClick={() => {
+              toast.success("Checkout complete! 🎉", { duration: 3500 });
+              navigate("/success");
+            }}
             aria-label="Proceed to checkout"
           >
             Checkout
