@@ -1,4 +1,3 @@
-// src/index.tsx eller src/main.tsx
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -7,11 +6,10 @@ import { ToastProvider } from "./components/Toast/ToastProvider";
 import App from "./App";
 import "./styles/globals.css";
 
-const savedTheme = localStorage.getItem("theme"); // 'light' | 'dark' | 'system' | null
+const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "dark" || savedTheme === "light") {
   document.documentElement.setAttribute("data-theme", savedTheme);
 } else {
-  // 'system' eller null: fjern attributt så @media-regelen får styre
   document.documentElement.removeAttribute("data-theme");
 }
 
