@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { formatNOK } from "../../lib/pricing";
 import styles from "./CheckoutPage.module.css";
-import { useToast } from "../../components/Toast/ToastProvider";
+import { useToast } from "../../components/Toast/ToastProvider"; // juster sti hvis nødvendig
 
 export default function CheckoutPage() {
   const { items, inc, dec, remove, addQty, totalAmount } = useCart();
@@ -13,7 +13,7 @@ export default function CheckoutPage() {
     return (
       <section className={styles.empty}>
         <div className={styles.emptyCard}>
-          <div className={styles.emptyIcon} aria-hidden>
+          <div className={styles.emptyIcon} aria-hidden={true}>
             🛒
           </div>
           <h1>Your cart</h1>
@@ -34,27 +34,38 @@ export default function CheckoutPage() {
       </header>
 
       <div className={styles.layout}>
-        {/* Left: cart items */}
         <ul className={styles.list} aria-label="Cart items">
           {items.map((i) => {
-            const unit = i.discountedPrice ?? i.price;
+            const unit =
+              typeof i.discountedPrice === "number"
+                ? i.discountedPrice
+                : i.price;
             const hasDiscount =
               typeof i.discountedPrice === "number" &&
               i.discountedPrice < i.price;
             const lineTotal = unit * i.qty;
 
+            // 👇 robust bilde-henting
+            const imgSrc =
+              i.imageUrl ??
+              (typeof (i as any).image === "string"
+                ? (i as any).image
+                : (i as any).image?.url) ??
+              (i as any).thumbnail ??
+              null;
+
             return (
               <li key={i.id} className={styles.item}>
-                {i.image ? (
+                {imgSrc ? (
                   <img
                     className={styles.thumb}
-                    src={i.image}
+                    src={imgSrc}
                     alt={i.title}
                     loading="lazy"
                     decoding="async"
                   />
                 ) : (
-                  <div className={styles.thumbFallback} aria-hidden>
+                  <div className={styles.thumbFallback} aria-hidden={true}>
                     🛍️
                   </div>
                 )}
@@ -83,10 +94,9 @@ export default function CheckoutPage() {
                         type="button"
                         className={styles.qtyBtn}
                         onClick={() => {
-                          const snapshot = { ...i }; // før endring
+                          const snapshot = { ...i };
                           dec(i.id);
                           if (snapshot.qty > 1) {
-                            // bare -1
                             toast.info(`Removed 1 × ${snapshot.title}`, {
                               duration: 3000,
                               action: {
@@ -95,7 +105,6 @@ export default function CheckoutPage() {
                               },
                             });
                           } else {
-                            // gikk til 0 -> fjernet vare
                             toast.error(`${snapshot.title} removed from cart`, {
                               duration: 4000,
                               action: {
@@ -151,7 +160,6 @@ export default function CheckoutPage() {
           })}
         </ul>
 
-        {/* Right: sticky summary */}
         <aside className={styles.checkoutSummary} aria-label="Order summary">
           <div className={styles.total}>
             <span>Total</span>

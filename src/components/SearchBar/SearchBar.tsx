@@ -2,10 +2,27 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useId, useRef, useState } from "react";
 import styles from "./SearchBar.module.css";
 
-export default function SearchBar({ value, onChange, results = [] }) {
+/** Minimal type for søkeresultater (tilpass gjerne til din Product-type) */
+export type SearchResult = {
+  id: string;
+  title: string;
+  image?:
+    | { url?: string } // f.eks. Noroff-APIets image-objekt
+    | string; // fallback hvis du lagrer ren URL
+  thumbnail?: string;
+  category?: string;
+};
+
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
+  results?: SearchResult[];
+};
+
+export default function SearchBar({ value, onChange, results = [] }: Props) {
   const navigate = useNavigate();
   const listboxId = useId();
-  const wrapRef = useRef(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
 
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -16,15 +33,15 @@ export default function SearchBar({ value, onChange, results = [] }) {
   }, [value, results]);
 
   useEffect(() => {
-    function onDocMouseDown(e) {
+    function onDocMouseDown(e: MouseEvent) {
       if (!wrapRef.current) return;
-      if (!wrapRef.current.contains(e.target)) setOpen(false);
+      if (!wrapRef.current.contains(e.target as Node)) setOpen(false);
     }
     document.addEventListener("mousedown", onDocMouseDown);
     return () => document.removeEventListener("mousedown", onDocMouseDown);
   }, []);
 
-  function handleKeyDown(e) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (
       !open &&
       (e.key === "ArrowDown" || e.key === "ArrowUp") &&
@@ -56,7 +73,7 @@ export default function SearchBar({ value, onChange, results = [] }) {
   return (
     <div className={styles.wrap} ref={wrapRef}>
       <div className={styles.inputWrap}>
-        <span className={styles.icon} aria-hidden>
+        <span className={styles.icon} aria-hidden={true}>
           🔎
         </span>
 
@@ -102,7 +119,10 @@ export default function SearchBar({ value, onChange, results = [] }) {
         <ul id={listboxId} className={styles.dropdown} role="listbox">
           {results.map((r, i) => {
             const isActive = i === activeIndex;
-            const imgSrc = r.image?.url || r.image || r.thumbnail || null;
+            const imgSrc =
+              (typeof r.image === "string" ? r.image : r.image?.url) ??
+              r.thumbnail ??
+              null;
 
             return (
               <li
@@ -113,7 +133,7 @@ export default function SearchBar({ value, onChange, results = [] }) {
                 className={`${styles.option} ${isActive ? styles.active : ""}`}
                 onMouseEnter={() => setActiveIndex(i)}
                 onMouseDown={(e) => {
-                  e.preventDefault();
+                  e.preventDefault(); // unngå blur før navigate
                   navigate(`/product/${r.id}`);
                 }}
               >
@@ -122,12 +142,12 @@ export default function SearchBar({ value, onChange, results = [] }) {
                     className={styles.thumb}
                     src={imgSrc}
                     alt=""
-                    aria-hidden
+                    aria-hidden={true}
                     loading="lazy"
                     decoding="async"
                   />
                 ) : (
-                  <div className={styles.thumbFallback} aria-hidden>
+                  <div className={styles.thumbFallback} aria-hidden={true}>
                     🛍️
                   </div>
                 )}

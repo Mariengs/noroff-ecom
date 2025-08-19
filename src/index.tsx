@@ -1,9 +1,9 @@
-// src/main.jsx eller src/index.jsx
+// src/index.tsx eller src/main.tsx
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
-import { ToastProvider } from "./components/Toast/ToastProvider"; // 👈 NY
+import { ToastProvider } from "./components/Toast/ToastProvider";
 import App from "./App";
 import "./styles/globals.css";
 
@@ -15,7 +15,10 @@ if (savedTheme === "dark" || savedTheme === "light") {
   document.documentElement.removeAttribute("data-theme");
 }
 
-createRoot(document.getElementById("root")).render(
+const rootEl = document.getElementById("root");
+if (!rootEl) throw new Error("Root element not found: #root");
+
+createRoot(rootEl).render(
   <React.StrictMode>
     <BrowserRouter>
       <CartProvider>

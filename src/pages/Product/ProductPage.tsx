@@ -1,32 +1,40 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // 👈 navigate for action
+import { useParams, useNavigate } from "react-router-dom";
 import { getProduct } from "../../lib/api";
 import { useCart } from "../../context/CartContext";
 import { formatNOK, discountPercent } from "../../lib/pricing";
 import { getImageUrl } from "../../lib/image";
-import { useToast } from "../../components/Toast/ToastProvider"; // 👈 toast
+import { useToast } from "../../components/Toast/ToastProvider";
 import s from "./ProductPage.module.css";
+import type { Product } from "../../types/onlineShop";
 
 export default function ProductPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const toast = useToast(); // 👈 toast api
+  const toast = useToast();
   const { add } = useCart();
 
-  const [product, setProduct] = useState(null);
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [product, setProduct] = useState<Product | null>(null);
+  const [activeIdx, setActiveIdx] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
         setError("");
-        const data = await getProduct(id);
+
+        if (!id) {
+          setError("Invalid product id");
+          setProduct(null);
+          return;
+        }
+
+        const data = await getProduct(id); // forventer Product
         setProduct(data);
         setActiveIdx(0);
-      } catch (e) {
+      } catch {
         setError("Could not load product");
       } finally {
         setLoading(false);
@@ -38,8 +46,11 @@ export default function ProductPage() {
   const primary = product ? getImageUrl(product) : null;
   const altText = product?.image?.alt || product?.title || "";
 
-  // API-et har i praksis ett bilde; beholder galleri-API for fremtidig støtte
-  const gallery = useMemo(() => (primary ? [primary] : []), [primary]);
+  // API-et har i praksis ett bilde; galleri for ev. fremtid
+  const gallery = useMemo<string[]>(
+    () => (primary ? [primary] : []),
+    [primary]
+  );
 
   useEffect(() => {
     if (activeIdx >= gallery.length) setActiveIdx(0);
@@ -48,11 +59,13 @@ export default function ProductPage() {
   const activeSrc = gallery[activeIdx] || primary || "";
 
   const hasDiscount =
-    product?.discountedPrice != null && product.discountedPrice < product.price;
+    product?.discountedPrice != null &&
+    product.discountedPrice < (product?.price ?? 0);
 
-  const pct = hasDiscount
-    ? discountPercent(product.price, product.discountedPrice)
-    : 0;
+  const pct =
+    hasDiscount && product
+      ? discountPercent(product.price, product.discountedPrice)
+      : 0;
 
   if (loading) return <p className={s.loading}>Loading…</p>;
   if (error)
@@ -63,16 +76,20 @@ export default function ProductPage() {
     );
   if (!product) return null;
 
-  function handleAdd() {
+  // Flyttet hit – nå vet TS at product ikke er null
+  function handleAdd(): void {
+    if (!product) return; // TS: produkt kan ikke være null under
+
+    const imageUrl = activeSrc || product.image?.url; // prioritér aktivt bilde
+
     add({
       id: product.id,
       title: product.title,
       price: product.price,
-      discountedPrice: product.discountedPrice ?? product.price,
-      image: activeSrc,
+      discountedPrice: product.discountedPrice,
+      imageUrl, // 👈 viktig for checkout-bilde
     });
 
-    // 👇 Vis toast med snarvei til handlekurven
     toast.success(`${product.title} added to your cart`, {
       duration: 2500,
       action: {
@@ -81,7 +98,6 @@ export default function ProductPage() {
       },
     });
   }
-
   return (
     <section className={s.section}>
       <div className={s.wrap}>

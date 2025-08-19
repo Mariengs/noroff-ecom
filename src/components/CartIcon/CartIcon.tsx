@@ -5,14 +5,13 @@ import { useCart } from "../../context/CartContext";
 import styles from "./CartIcon.module.css";
 
 export default function CartIcon() {
-  const { totalQty } = useCart();
+  const { totalQty } = useCart(); // ✅ nå er hooken typet
   const navigate = useNavigate();
 
   const [bump, setBump] = useState(false);
   const [floating, setFloating] = useState(false);
-  const prevQty = useRef(totalQty);
+  const prevQty = useRef<number>(totalQty);
 
-  // Bump
   useEffect(() => {
     if (totalQty !== prevQty.current) {
       setBump(true);
@@ -22,7 +21,6 @@ export default function CartIcon() {
     }
   }, [totalQty]);
 
-  // Toggle floating scroll
   useEffect(() => {
     const onScroll = () => setFloating(window.scrollY > 150);
     onScroll();
@@ -49,7 +47,6 @@ export default function CartIcon() {
         </span>
       )}
 
-      {/* Skjult live-region for skjermlesere */}
       <span className="sr-only" aria-live="polite">
         {totalQty > 0 ? `${totalQty} items in cart` : "Cart is empty"}
       </span>

@@ -8,6 +8,7 @@ export default function CheckoutSuccessPage() {
 
   // Beskytt mot dobbel kjøring i React 18 StrictMode (dev)
   const cleared = useRef(false);
+
   useEffect(() => {
     if (!cleared.current) {
       clear();
@@ -18,7 +19,7 @@ export default function CheckoutSuccessPage() {
   return (
     <section className={styles.page}>
       <div className={styles.card} role="status" aria-live="polite">
-        <div className={styles.icon} aria-hidden>
+        <div className={styles.icon} aria-hidden={true}>
           ✓
         </div>
 
