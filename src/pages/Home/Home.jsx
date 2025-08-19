@@ -26,7 +26,6 @@ export default function Home() {
     })();
   }, []);
 
-  // --- Søkelogikk: match tittel ELLER tags, støtt #tag-søk og flere tokens (AND) ---
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return products;
@@ -39,14 +38,12 @@ export default function Home() {
         ? p.tags.map((t) => String(t).toLowerCase())
         : [];
 
-      // hvert token må matche enten tittel eller en tag
       return tokens.every((tok) => {
-        // #tag → match kun mot tags
         if (tok.startsWith("#")) {
           const needle = tok.slice(1);
           return tags.some((t) => t.includes(needle));
         }
-        // vanlig token → match tittel ELLER tags
+
         return title.includes(tok) || tags.some((t) => t.includes(tok));
       });
     }
@@ -54,7 +51,6 @@ export default function Home() {
     return products.filter(matches);
   }, [products, query]);
 
-  // --- Sortér resultatene ---
   const sorted = useMemo(() => {
     const arr = [...filtered];
     switch (sort) {
@@ -77,15 +73,14 @@ export default function Home() {
     }
   }, [filtered, sort]);
 
-  // --- Data til SearchBar: topp 8 + vis tags som undertekst ---
   const searchResults = useMemo(() => {
     return sorted.slice(0, 8).map((p) => ({
       ...p,
-      // SearchBar viser r.category som undertekst – bruk tags der:
+
       category: Array.isArray(p.tags)
         ? p.tags.slice(0, 3).join(", ")
         : undefined,
-      // hjelpsomt for bildet i dropdown:
+
       image: p.image?.url ?? p.image ?? undefined,
     }));
   }, [sorted]);
@@ -109,14 +104,8 @@ export default function Home() {
     <section className="container--narrow">
       <h1>Products</h1>
       <p className="home-subtitle">Thoughtful products, quietly beautiful.</p>
-
-      {/* 🔍 Søk i tittel og tags (støtter #tag) */}
       <SearchBar value={query} onChange={setQuery} results={searchResults} />
-
-      {/* 🔽 Sortering */}
       <SortButton value={sort} onChange={setSort} />
-
-      {/* 🛒 Produkter */}
       <div className="grid--products">
         {sorted.map((p) => (
           <ProductCard key={p.id} product={p} />

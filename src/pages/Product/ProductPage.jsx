@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // 👈 navigate for action
 import { getProduct } from "../../lib/api";
 import { useCart } from "../../context/CartContext";
 import { formatNOK, discountPercent } from "../../lib/pricing";
 import { getImageUrl } from "../../lib/image";
+import { useToast } from "../../components/Toast/ToastProvider"; // 👈 toast
 import s from "./ProductPage.module.css";
 
 export default function ProductPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const toast = useToast(); // 👈 toast api
   const { add } = useCart();
 
   const [product, setProduct] = useState(null);
@@ -67,6 +70,15 @@ export default function ProductPage() {
       price: product.price,
       discountedPrice: product.discountedPrice ?? product.price,
       image: activeSrc,
+    });
+
+    // 👇 Vis toast med snarvei til handlekurven
+    toast.success(`${product.title} added to your cart`, {
+      duration: 2500,
+      action: {
+        label: "Go to cart",
+        onClick: () => navigate("/checkout"),
+      },
     });
   }
 

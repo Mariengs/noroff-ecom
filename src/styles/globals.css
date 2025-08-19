@@ -266,3 +266,62 @@ h1 {
   --shadow-sm: 0 6px 16px rgba(23, 16, 53, 0.06);
   --shadow: 0 14px 30px rgba(23, 16, 53, 0.08);
 }
+
+/* Fjern hvit bakgrunn/innramming bak kortene i dark-mode */
+:root[data-theme="dark"] .grid--products {
+  background: none;
+  border-color: color-mix(in srgb, var(--border) 55%, transparent);
+  box-shadow: none;
+}
+
+/* Hvis brukeren følger systemtema (ingen data-theme settes) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .grid--products {
+    background: none;
+    border-color: color-mix(in srgb, var(--border) 55%, transparent);
+    box-shadow: none;
+  }
+}
+
+/* === Tiny phones (≤375px): alltid litt ekstra luft og sentrering === */
+@media (max-width: 375px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Alle vanlige containere hos deg */
+  .container,
+  .container--narrow,
+  .page,
+  .wrap,
+  section.container--narrow {
+    max-width: 100%;
+    width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+
+    /* litt mer luft på høyre side */
+    padding-inline-start: 18px;
+    padding-inline-end: 26px;
+  }
+
+  /* Produkt-grid får også litt mer pust */
+  .grid--products {
+    padding: 16px;
+  }
+}
+
+/* Safe-area støtte (notch) når nettleseren kan det */
+@supports (padding: max(0px)) {
+  @media (max-width: 375px) {
+    .container,
+    .container--narrow,
+    .page,
+    .wrap,
+    section.container--narrow {
+      padding-inline-start: max(18px, env(safe-area-inset-left));
+      padding-inline-end: max(26px, env(safe-area-inset-right));
+    }
+  }
+}

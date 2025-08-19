@@ -24,7 +24,7 @@
 }
 
 .media {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 1; /* Desktop: pen firkant */
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -42,10 +42,14 @@
     var(--card);
 }
 
+/* 🔧 Ikke faste width/height – bruk maks-størrelser */
 .img {
-  width: 88%;
-  height: 88%;
-  object-fit: contain;
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 88%;
+  max-height: 88%;
+  object-fit: contain; /* hele bildet bevares */
   margin: auto;
   padding: clamp(8px, 1.8vw, 16px);
 }
@@ -309,13 +313,18 @@
   .hero {
     grid-template-columns: 1fr;
   }
+
+  /* 📱 Viktig: la bildet styre høyden, ikke containeren */
   .media {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: unset; /* fjern fast ratio på mobil */
   }
+
   .img {
-    width: 92%;
-    height: 92%;
-    padding: clamp(10px, 3vw, 16px);
+    width: 100%; /* fyll bredden */
+    height: auto; /* skaler høyden proporsjonalt */
+    max-width: 100%;
+    max-height: none; /* ingen kapping */
+    padding: clamp(8px, 3vw, 12px);
   }
 }
 

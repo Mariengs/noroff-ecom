@@ -227,36 +227,77 @@
   filter: brightness(1.05);
 }
 
-/* --- Dark-mode fix for white cards (force dark text) --- */
-
-/* Treffer både når .dark ligger på <html> eller <body>, og når ThemeToggle bruker [data-theme="dark"] */
-:global(html.dark) :where(.item, .checkoutSummary, .emptyCard),
-:global(body.dark) :where(.item, .checkoutSummary, .emptyCard),
+/* Når brukeren har valgt dark via ThemeToggle */
 :global([data-theme="dark"]) :where(.item, .checkoutSummary, .emptyCard) {
-  color: #111 !important; /* base text (inherit) */
+  background: var(--surface); /* mørk kortflate fra temaet */
+  color: var(--ink); /* lys tekst fra temaet */
+  border-color: var(--border); /* mørk rammefarge */
 }
 
-/* Overstyr typiske tekstnoder inni kortene (uten å rote til knapper/lenker) */
-:global(html.dark)
-  :where(.item, .checkoutSummary, .emptyCard)
-  :where(h1, h2, h3, h4, h5, h6, p, span, small, strong, em, div, li),
-:global(body.dark)
-  :where(.item, .checkoutSummary, .emptyCard)
-  :where(h1, h2, h3, h4, h5, h6, p, span, small, strong, em, div, li),
-:global([data-theme="dark"])
-  :where(.item, .checkoutSummary, .emptyCard)
-  :where(h1, h2, h3, h4, h5, h6, p, span, small, strong, em, div, li) {
-  color: #111 !important;
+/* System-dark (når data-theme IKKE er satt) */
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme])) :where(.item, .checkoutSummary, .emptyCard) {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--border);
+  }
 }
 
-/* Behold bevisst fargevalg for spesifikke elementer */
-:global(.dark) .priceWas {
-  color: #888 !important;
-} /* gjennomstreket "før"-pris */
-:global(.dark) .remove {
-  color: #dc2626 !important;
-} /* "Remove"-lenken skal være rød */
-:global(.dark) .checkoutBtn,
-:global(.dark) .primaryLink {
-  color: #fff !important;
-} /* knapper med gradient skal ha hvit tekst */
+/* Header-tekst inne på siden (gjør undertekst lys i dark) */
+:global([data-theme="dark"]) .header p {
+  color: var(--muted);
+}
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme])) .header p {
+    color: var(--muted);
+  }
+}
+
+/* Tom-bildebakgrunn i dark */
+:global([data-theme="dark"]) .thumbFallback {
+  background: color-mix(in srgb, var(--surface) 88%, black 12%);
+  color: #bbb;
+}
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme])) .thumbFallback {
+    background: color-mix(in srgb, var(--surface) 88%, black 12%);
+    color: #bbb;
+  }
+}
+
+/* Mengde-knapper i dark */
+:global([data-theme="dark"]) .qtyBtn {
+  background: color-mix(in srgb, var(--surface) 85%, black 15%);
+  border-color: var(--border);
+  color: var(--ink);
+}
+:global([data-theme="dark"]) .qtyBtn:hover {
+  background: color-mix(in srgb, var(--surface) 78%, black 22%);
+}
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme])) .qtyBtn {
+    background: color-mix(in srgb, var(--surface) 85%, black 15%);
+    border-color: var(--border);
+    color: var(--ink);
+  }
+  :global(:root:not([data-theme])) .qtyBtn:hover {
+    background: color-mix(in srgb, var(--surface) 78%, black 22%);
+  }
+}
+
+/* Pris-stryk og lenkefarger – behold intensjon */
+:global([data-theme="dark"]) .priceWas {
+  color: #a5a7b3;
+}
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme])) .priceWas {
+    color: #a5a7b3;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :global([data-theme="dark"]) .remove,
+  :global(:root:not([data-theme])) .remove {
+    color: #f87171;
+  }
+}

@@ -1,7 +1,9 @@
+// src/main.jsx eller src/index.jsx
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { CartProvider } from "./context/CartContext"; // ← viktig
+import { CartProvider } from "./context/CartContext";
+import { ToastProvider } from "./components/Toast/ToastProvider"; // 👈 NY
 import App from "./App";
 import "./styles/globals.css";
 
@@ -17,7 +19,9 @@ createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <CartProvider>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </CartProvider>
     </BrowserRouter>
   </React.StrictMode>
