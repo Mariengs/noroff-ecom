@@ -1,0 +1,121 @@
+/* src/components/SearchBar/SearchBar.module.css */
+
+.wrap {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 2rem auto; /* 👈 mer luft under søkefeltet */
+}
+
+.inputWrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 0 0.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.icon {
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0.6rem;
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.clear {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+
+.clear:hover {
+  color: var(--ink);
+}
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  max-height: 280px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  z-index: 1000;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.option:hover,
+.option.active {
+  background: rgba(155, 139, 243, 0.1);
+}
+
+.thumb {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.thumbFallback {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: #f3f4f6;
+  color: #888;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.sub {
+  font-size: 0.8rem;
+  color: var(--muted);
+}

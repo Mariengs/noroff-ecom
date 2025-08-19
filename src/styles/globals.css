@@ -11,6 +11,7 @@
   --sky: #cfe8ff;
 
   --brand: #9b8bf3; /* primær aksent */
+  --brand-2: #0ea5e9; /* SEKUNDÆR aksent (NY) */
   --brand-strong: #7b68ee;
 
   /* Rammer, radius, skygge */
@@ -43,7 +44,7 @@ body {
   margin: 0;
   font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
     Segoe UI, Roboto, Arial, sans-serif;
-  font-feature-settings: "ss01" 1, "ss02" 1; /* litt mer sofistikert former hvis fonten støtter */
+  font-feature-settings: "ss01" 1, "ss02" 1;
   color: var(--ink);
   background: radial-gradient(
       800px 400px at 10% 0%,
@@ -99,7 +100,7 @@ h1 {
   color: var(--muted);
 }
 
-/* Pastellkort-grid (kompakt, men elegant) */
+/* Pastellkort-grid */
 .grid--products {
   display: grid !important;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -111,7 +112,7 @@ h1 {
   box-shadow: var(--shadow-sm);
 }
 
-/* Knapper – sans serif, ren kontur */
+/* Knapper */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -140,6 +141,18 @@ h1 {
   border-color: var(--border);
 }
 
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;
@@ -148,7 +161,7 @@ h1 {
   }
 }
 
-/* 🌙 Dark Pastel Mode */
+/* 🌙 System Dark (gjelder når du ikke har satt data-theme selv) */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #16161d;
@@ -156,12 +169,13 @@ h1 {
     --ink: #f3f4f7;
     --muted: #a1a5b3;
 
-    --lavender: #b8a8ff; /* pastel aksenter funker fortsatt på mørkt */
+    --lavender: #b8a8ff;
     --mint: #7ed9af;
     --blush: #ffb6c9;
     --sky: #9ecbff;
 
     --brand: #b8a8ff;
+    --brand-2: #0ea5e9; /* NY */
     --brand-strong: #9b8bf3;
 
     --border: #2a2b36;
@@ -212,7 +226,7 @@ h1 {
   }
 }
 
-/* Manuell override – høyere spesifisitet enn :root og media-regler */
+/* Manuell override via ThemeToggle (Light/Dark) */
 :root[data-theme="dark"] {
   --bg: #16161d;
   --surface: #1e1f27;
@@ -225,6 +239,7 @@ h1 {
   --sky: #9ecbff;
 
   --brand: #b8a8ff;
+  --brand-2: #0ea5e9; /* NY */
   --brand-strong: #9b8bf3;
 
   --border: #2a2b36;
@@ -232,8 +247,6 @@ h1 {
   --shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
 }
 
-/* Viktig: vi trenger også en LIGHT override for å kunne tvinge lys
-   selv om systemet er i dark (media-regelen). */
 :root[data-theme="light"] {
   --bg: #fbfbfe;
   --surface: #ffffff;
@@ -246,6 +259,7 @@ h1 {
   --sky: #cfe8ff;
 
   --brand: #9b8bf3;
+  --brand-2: #0ea5e9; /* NY */
   --brand-strong: #7b68ee;
 
   --border: #eceaf6;

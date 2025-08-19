@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import CartIcon from "../CartIcon/CartIcon";
 import styles from "./Header.module.css";
-import Logo from "../../assets/logo.svg"; // 👈 importér SVG som React-komponent
+import Logo from "../../assets/logo.svg";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
 export default function Header() {

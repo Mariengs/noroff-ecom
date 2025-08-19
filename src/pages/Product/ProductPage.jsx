@@ -51,7 +51,6 @@ export default function ProductPage() {
     ? discountPercent(product.price, product.discountedPrice)
     : 0;
 
-  // Early returns
   if (loading) return <p className={s.loading}>Loading…</p>;
   if (error)
     return (

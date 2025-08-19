@@ -1,0 +1,128 @@
+.page {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-5);
+}
+
+.card {
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: clamp(20px, 5vw, 32px);
+  text-align: center;
+}
+
+/* Suksess-ikon i en boble */
+.icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-3);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(135deg, #22c55e, #0ea5e9);
+  box-shadow: 0 12px 28px rgba(14, 165, 233, 0.25);
+  animation: pop-in var(--dur) var(--ease);
+}
+
+/* Tittel og tekst */
+.title {
+  margin: 0 0 var(--space-2);
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 0 auto var(--space-4);
+  max-width: 46ch;
+  color: var(--muted);
+}
+
+/* Knapper */
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #0ea5e9, #22c55e);
+  color: #fff;
+  font-weight: 700;
+  transition: transform var(--dur) var(--ease), filter var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+  text-decoration: none;
+}
+.primaryBtn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-sm);
+}
+
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+.secondaryBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Liten hint-tekst */
+.hint {
+  margin-top: var(--space-2);
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* Animations */
+@keyframes pop-in {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Redusert bevegelse */
+@media (prefers-reduced-motion: reduce) {
+  .icon {
+    animation: none !important;
+  }
+  .primaryBtn,
+  .secondaryBtn {
+    transition: none !important;
+  }
+}
