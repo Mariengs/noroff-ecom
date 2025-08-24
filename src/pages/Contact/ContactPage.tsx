@@ -91,7 +91,7 @@ export default function ContactPage() {
 
     try {
       setSubmitting(true);
-      // Send til API her om ønskelig
+      // Send to API if desired
       console.log("Contact form data:", values);
       setSent(true);
       setToast({ type: "success", message: "Message sent successfully!" });
@@ -107,6 +107,7 @@ export default function ContactPage() {
         tabIndex={-1}
         aria-hidden="true"
         className={s.topAnchor}
+        data-testid="topAnchor"
       />
 
       {toast && (
