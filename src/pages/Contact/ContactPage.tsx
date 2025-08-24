@@ -5,7 +5,7 @@ type FormValues = {
   fullName: string;
   subject: string;
   email: string;
-  body: string; // message
+  body: string;
 };
 
 type FormErrors = Partial<Record<keyof FormValues, string>>;
@@ -41,19 +41,15 @@ export default function ContactPage() {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [toast, setToast] = useState<Toast>(null);
 
-  // 🔹 Referanse til toppen for smooth scroll + fokus
   const topRef = useRef<HTMLDivElement>(null);
-
-  // 🔹 Disable-knapp når skjemaet har feil
   const hasErrors = useMemo(
     () => Object.keys(validate(values)).length > 0,
     [values]
   );
 
-  // Auto-hide toast etter 4s
   useEffect(() => {
     if (!toast) return;
-    const t = setTimeout(() => setToast(null), 4000);
+    const t = setTimeout(() => setToast(null), 5000);
     return () => clearTimeout(t);
   }, [toast]);
 
@@ -106,7 +102,6 @@ export default function ContactPage() {
 
   return (
     <section className={`${s.section} ${sent ? s.sent : ""}`}>
-      {/* 🔹 Usynlig fokus-anker på toppen (for scroll & a11y) */}
       <div
         ref={topRef}
         tabIndex={-1}
@@ -114,7 +109,6 @@ export default function ContactPage() {
         className={s.topAnchor}
       />
 
-      {/* Toast (nå med bedre kontrast i mørkt tema via CSS) */}
       {toast && (
         <div
           className={`${s.toast} ${

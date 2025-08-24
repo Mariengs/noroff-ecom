@@ -45,7 +45,6 @@
   color: var(--ink);
 }
 
-/* Dropdown */
 .dropdown {
   position: absolute;
   top: calc(100% + 6px);

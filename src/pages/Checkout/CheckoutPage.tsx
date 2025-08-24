@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { formatNOK } from "../../lib/pricing";
 import styles from "./CheckoutPage.module.css";
-import { useToast } from "../../components/Toast/ToastProvider"; // juster sti hvis nødvendig
+import { useToast } from "../../components/Toast/ToastProvider";
 
 export default function CheckoutPage() {
   const { items, inc, dec, remove, addQty, totalAmount } = useCart();

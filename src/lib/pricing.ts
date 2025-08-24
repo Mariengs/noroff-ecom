@@ -1,4 +1,3 @@
-// Rask formatter – kan evt. flyttes til en memoized formatter hvis du kaller den ofte
 export function formatNOK(amount: number): string {
   try {
     if (!Number.isFinite(amount)) return "–";
@@ -11,10 +10,6 @@ export function formatNOK(amount: number): string {
   }
 }
 
-/**
- * Beregner rabatt i prosent (avrundet til nærmeste heltall).
- * Returnerer 0 hvis input er ugyldig eller ingen rabatt.
- */
 export function discountPercent(
   price: number,
   discountedPrice: number | null | undefined

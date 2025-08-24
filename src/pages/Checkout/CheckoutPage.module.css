@@ -1,30 +1,23 @@
-/* ==== Sticky footer baseline (fikser iPad/nettbrett) ==== */
 html,
 body {
   height: 100%;
 }
 
 body {
-  min-height: 100svh; /* “small viewport” – bra på iOS/iPadOS */
-  min-height: 100dvh; /* moderne fallback for dynamiske UI-bars */
+  min-height: 100svh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
-/* La hovedinnholdet ta plassen, så footeren kan skyves ned */
 .page {
   flex: 1 0 auto;
 }
 
-/* Dytt footer til bunnen når innholdet er kort */
 footer {
   margin-top: auto;
-  padding-bottom: env(
-    safe-area-inset-bottom
-  ); /* trygg kant nederst på iPad/iPhone */
+  padding-bottom: env(safe-area-inset-bottom);
 }
-
-/* ==== Din eksisterende stil + våre mobiloverstyringer ==== */
 
 .page {
   display: grid;
@@ -48,7 +41,6 @@ footer {
   font-size: 0.95rem;
 }
 
-/* Layout for varer + summary */
 .layout {
   display: grid;
   gap: 2rem;
@@ -61,7 +53,6 @@ footer {
   }
 }
 
-/* Varer i handlekurven */
 .list {
   list-style: none;
   margin: 0;
@@ -80,7 +71,6 @@ footer {
   align-items: flex-start;
 }
 
-/* Bilde */
 .thumb {
   width: 80px;
   height: 80px;
@@ -98,7 +88,6 @@ footer {
   font-size: 1.5rem;
 }
 
-/* Info */
 .info {
   flex: 1;
   display: flex;
@@ -126,7 +115,6 @@ footer {
   font-size: 0.9rem;
 }
 
-/* Mengde-kontroller */
 .controls {
   display: flex;
   align-items: center;
@@ -172,13 +160,11 @@ footer {
   text-decoration: underline;
 }
 
-/* Linje-total */
 .lineTotal {
   font-weight: 600;
   align-self: center;
 }
 
-/* Checkout summary */
 .checkoutSummary {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
@@ -258,14 +244,12 @@ footer {
   filter: brightness(1.05);
 }
 
-/* Når brukeren har valgt dark via ThemeToggle */
 :global([data-theme="dark"]) :where(.item, .checkoutSummary, .emptyCard) {
-  background: var(--surface); /* mørk kortflate fra temaet */
-  color: var(--ink); /* lys tekst fra temaet */
-  border-color: var(--border); /* mørk rammefarge */
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--border);
 }
 
-/* System-dark (når data-theme IKKE er satt) */
 @media (prefers-color-scheme: dark) {
   :global(:root:not([data-theme])) :where(.item, .checkoutSummary, .emptyCard) {
     background: var(--surface);
@@ -274,7 +258,6 @@ footer {
   }
 }
 
-/* Header-tekst inne på siden (gjør undertekst lys i dark) */
 :global([data-theme="dark"]) .header p {
   color: var(--muted);
 }
@@ -284,7 +267,6 @@ footer {
   }
 }
 
-/* Tom-bildebakgrunn i dark */
 :global([data-theme="dark"]) .thumbFallback {
   background: color-mix(in srgb, var(--surface) 88%, black 12%);
   color: #bbb;
@@ -296,7 +278,6 @@ footer {
   }
 }
 
-/* Mengde-knapper i dark */
 :global([data-theme="dark"]) .qtyBtn {
   background: color-mix(in srgb, var(--surface) 85%, black 15%);
   border-color: var(--border);
@@ -316,7 +297,6 @@ footer {
   }
 }
 
-/* Pris-stryk og lenkefarger – behold intensjon */
 :global([data-theme="dark"]) .priceWas {
   color: #a5a7b3;
 }
@@ -333,83 +313,71 @@ footer {
   }
 }
 
-/* ==== Mobile-first forbedringer (overstyringer) ==== */
-
-/* Sørg for at lange ord/titler bryter og ikke skaper horisontal scrolling */
 .title {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 
-/* Prislinjen kan bryte på mobil */
 .prices {
   flex-wrap: wrap;
 }
 
-/* Bildet holder kvadratisk form som default (overstyres spesifikt på mobil) */
 .thumb,
 .thumbFallback {
   aspect-ratio: 1 / 1;
 }
 
-/* Gjør checkout-knappen lettere å trykke på på mobil */
 .checkoutBtn {
   width: 100%;
 }
 
-/* Ekstra kompakt padding på veldig smale skjermer */
 @media (max-width: 380px) {
   .page {
     padding: 1rem 0.75rem;
   }
 }
 
-/* ——— Små skjermer: behold rad-layout for kompakte kort ——— */
 @media (max-width: 480px) {
   .item {
-    flex-direction: row; /* behold rad-layout for kompakt høyde */
+    flex-direction: row;
     align-items: flex-start;
     gap: 0.75rem;
   }
 
   .thumb,
   .thumbFallback {
-    width: 72px; /* litt mindre bilde */
+    width: 72px;
     height: 72px;
     flex-shrink: 0;
   }
 
   .info {
-    flex: 1; /* tekst får resten av bredden */
+    flex: 1;
     width: auto;
   }
 
   .controls {
-    flex-wrap: wrap; /* bryt ved behov, men bli ved siden av bildet */
+    flex-wrap: wrap;
     gap: 0.5rem;
   }
 
-  /* Linjetotal plasseres til høyre og nederst i innholdskolonnen */
   .lineTotal {
     margin-left: auto;
     align-self: flex-end;
     text-align: right;
   }
 
-  /* Sticky summary kan skape “klistre”-kollisjon på mobil – slå av */
   .checkoutSummary {
     position: static;
     top: auto;
   }
 
-  /* Totalsum kan bryte penere */
   .total {
     flex-wrap: wrap;
     row-gap: 0.25rem;
   }
 }
 
-/* ——— Mellomstore skjermer: litt mer luft, men behold 1-kolonne layout ——— */
 @media (min-width: 481px) and (max-width: 767px) {
   .item {
     gap: 0.75rem;
@@ -427,7 +395,6 @@ footer {
   }
 }
 
-/* ——— Desktop (som før) ——— */
 @media (min-width: 768px) {
   .layout {
     grid-template-columns: 2fr 1fr;

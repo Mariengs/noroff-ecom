@@ -33,7 +33,7 @@ export default function ProductCard({ product }: Props) {
       title: product.title,
       price: product.price,
       discountedPrice: product.discountedPrice,
-      imageUrl: product.image?.url, // 👈 viktig for at bilde vises i checkout
+      imageUrl: product.image?.url,
     });
     toast.success(`Added ${product.title} to cart`);
   }

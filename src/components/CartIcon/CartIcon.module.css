@@ -8,7 +8,6 @@
   --border: rgba(0, 0, 0, 0.08);
 }
 
-/* Standard knapp (i header) */
 .button {
   position: relative;
   display: inline-grid;
@@ -47,7 +46,6 @@
   transform: translateY(1px);
 }
 
-/* Badge */
 .badge {
   position: absolute;
   top: -6px;
@@ -68,7 +66,6 @@
   animation: badge-pop 260ms ease-out;
 }
 
-/* Floating FAB  */
 .floating {
   position: fixed !important;
   right: 16px;
@@ -85,7 +82,6 @@
   opacity: 1;
 }
 
-/* Bump  */
 .bump {
   animation: bump 450ms ease-out;
 }

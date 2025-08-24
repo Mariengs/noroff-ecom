@@ -22,23 +22,18 @@ function readInitialMode(): Mode {
 export default function ThemeToggle() {
   const [mode, setMode] = useState<Mode>(readInitialMode);
 
-  // Hold <html data-theme> og localStorage i sync
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", mode);
     try {
       localStorage.setItem("theme", mode);
-    } catch {
-      /* ignore */
-    }
+    } catch {}
   }, [mode]);
 
-  // (Valgfritt) Følg systemendringer live
   useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return;
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = () => {
       const saved = localStorage.getItem("theme");
-      // Bare auto-oppdater hvis bruker ikke har lagret et eksplisitt valg
       if (saved !== "light" && saved !== "dark") {
         setMode(mq.matches ? "dark" : "light");
       }

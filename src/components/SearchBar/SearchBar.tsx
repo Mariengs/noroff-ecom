@@ -2,13 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useId, useRef, useState } from "react";
 import styles from "./SearchBar.module.css";
 
-/** Minimal type for søkeresultater (tilpass gjerne til din Product-type) */
 export type SearchResult = {
   id: string;
   title: string;
-  image?:
-    | { url?: string } // f.eks. Noroff-APIets image-objekt
-    | string; // fallback hvis du lagrer ren URL
+  image?: { url?: string } | string;
   thumbnail?: string;
   category?: string;
 };
@@ -133,7 +130,7 @@ export default function SearchBar({ value, onChange, results = [] }: Props) {
                 className={`${styles.option} ${isActive ? styles.active : ""}`}
                 onMouseEnter={() => setActiveIndex(i)}
                 onMouseDown={(e) => {
-                  e.preventDefault(); // unngå blur før navigate
+                  e.preventDefault();
                   navigate(`/product/${r.id}`);
                 }}
               >

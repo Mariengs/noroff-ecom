@@ -5,7 +5,7 @@ import { useCart } from "../../context/CartContext";
 import styles from "./CartIcon.module.css";
 
 export default function CartIcon() {
-  const { totalQty } = useCart(); // ✅ nå er hooken typet
+  const { totalQty } = useCart();
   const navigate = useNavigate();
 
   const [bump, setBump] = useState(false);

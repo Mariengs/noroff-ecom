@@ -20,7 +20,7 @@ export type ToastItem = {
   id: number;
   message: string;
   type: ToastType;
-  duration: number; // ms; 0 eller negativt = ikke auto-dismiss
+  duration: number;
   action?: ToastAction;
 };
 
@@ -32,18 +32,13 @@ export type PushArgs = {
 };
 
 export interface ToastAPI {
-  /** Generisk notify (default type: info) */
   notify: (message: string, opts?: Omit<PushArgs, "message">) => number;
-  /** Grønn suksess */
   success: (
     message: string,
     opts?: Omit<PushArgs, "message" | "type">
   ) => number;
-  /** Rød feil */
   error: (message: string, opts?: Omit<PushArgs, "message" | "type">) => number;
-  /** Blå info */
   info: (message: string, opts?: Omit<PushArgs, "message" | "type">) => number;
-  /** Fjern en enkelt toast */
   remove: (id: number) => void;
 }
 

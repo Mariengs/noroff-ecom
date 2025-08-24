@@ -17,7 +17,6 @@
   text-align: center;
 }
 
-/* Suksess-ikon i en boble */
 .icon {
   width: 72px;
   height: 72px;
@@ -33,7 +32,6 @@
   animation: pop-in var(--dur) var(--ease);
 }
 
-/* Tittel og tekst */
 .title {
   margin: 0 0 var(--space-2);
   font-size: 1.8rem;
@@ -46,7 +44,6 @@
   color: var(--muted);
 }
 
-/* Knapper */
 .actions {
   display: flex;
   gap: 10px;
@@ -94,14 +91,12 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* Liten hint-tekst */
 .hint {
   margin-top: var(--space-2);
   color: var(--muted);
   font-size: 0.92rem;
 }
 
-/* Animations */
 @keyframes pop-in {
   0% {
     transform: scale(0.8);
@@ -116,7 +111,6 @@
   }
 }
 
-/* Redusert bevegelse */
 @media (prefers-reduced-motion: reduce) {
   .icon {
     animation: none !important;

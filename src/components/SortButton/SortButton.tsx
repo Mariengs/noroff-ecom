@@ -9,7 +9,7 @@ export type SortValue =
   | "title";
 
 export type SortOption = {
-  value: SortValue; // ⬅️ stram inn til SortValue
+  value: SortValue;
   label: string;
 };
 
@@ -22,8 +22,8 @@ const DEFAULT_OPTIONS: Readonly<SortOption[]> = [
 ] as const;
 
 type Props = {
-  value: SortValue; // ⬅️ strammere
-  onChange: (val: SortValue) => void; // ⬅️ strammere
+  value: SortValue;
+  onChange: (val: SortValue) => void;
   options?: SortOption[];
 };
 
@@ -49,7 +49,6 @@ export default function SortButton({
   }, []);
 
   function choose(val: SortValue) {
-    // ⬅️ strammere
     onChange(val);
     setOpen(false);
   }
@@ -85,7 +84,7 @@ export default function SortButton({
               }`}
               onMouseDown={(e) => {
                 e.preventDefault();
-                choose(o.value); // ⬅️ nå er val = SortValue
+                choose(o.value);
               }}
             >
               {o.label}

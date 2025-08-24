@@ -1,17 +1,16 @@
 :root {
-  /* Pastell – dempet palett */
   --bg: #fbfbfe;
   --surface: #ffffff;
   --ink: #1b1f27;
   --muted: #667085;
 
-  --lavender: #b8a8ff; /* aksent */
+  --lavender: #b8a8ff;
   --mint: #aee6c5;
   --blush: #ffdbe8;
   --sky: #cfe8ff;
 
-  --brand: #9b8bf3; /* primær aksent */
-  --brand-2: #0ea5e9; /* SEKUNDÆR aksent */
+  --brand: #9b8bf3;
+  --brand-2: #0ea5e9;
   --brand-strong: #7b68ee;
 
   /* Rammer, radius, skygge */
@@ -67,7 +66,6 @@ a:hover {
   text-decoration: none;
 }
 
-/* Layout helpers */
 .container {
   max-width: 1100px;
   margin: 0 auto;
@@ -79,12 +77,10 @@ a:hover {
   padding: 0 var(--space-4);
 }
 
-/* Seksjon-spacing */
 section {
   padding-block: var(--space-5);
 }
 
-/* Overskrifter */
 h1,
 h2,
 h3 {
@@ -100,7 +96,6 @@ h1 {
   color: var(--muted);
 }
 
-/* Pastellkort-grid */
 .grid--products {
   display: grid !important;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -112,7 +107,6 @@ h1 {
   box-shadow: var(--shadow-sm);
 }
 
-/* Knapper */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -161,7 +155,6 @@ h1 {
   }
 }
 
-/* System Dark (gjelder når du ikke har satt data-theme selv) */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #16161d;

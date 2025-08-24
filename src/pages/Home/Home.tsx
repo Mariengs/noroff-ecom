@@ -21,7 +21,7 @@ export default function Home() {
     (async () => {
       try {
         setLoading(true);
-        const data = await getProducts(); // Forventes å være Product[]
+        const data = await getProducts();
         setProducts(Array.isArray(data) ? data : []);
         setError(null);
       } catch {
@@ -85,7 +85,7 @@ export default function Home() {
       category: Array.isArray(p.tags)
         ? p.tags.slice(0, 3).join(", ")
         : undefined,
-      image: p.image?.url ?? (p as any).image ?? undefined, // støtt ev. string-image
+      image: p.image?.url ?? (p as any).image ?? undefined,
       thumbnail: undefined,
     }));
   }, [sorted]);

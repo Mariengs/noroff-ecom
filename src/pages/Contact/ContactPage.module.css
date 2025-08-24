@@ -12,7 +12,7 @@
   max-width: 600px;
   margin-inline: auto;
   padding-inline: clamp(12px, 5vw, 24px);
-  box-sizing: border-box; /* ✅ hindrer overflow-linje */
+  box-sizing: border-box;
 }
 
 .title {
@@ -114,14 +114,13 @@
   outline-offset: 2px;
 }
 
-/* ===== Mobil (<= 560px) ===== */
 @media (max-width: 560px) {
   .wrap {
     max-width: 100%;
   }
 
   .btn {
-    max-width: none; /* full bredde på mobil */
+    max-width: none;
     width: 100%;
   }
 
@@ -131,7 +130,6 @@
   }
 }
 
-/* Top anchor (for scroll & fokus uten å påvirke layout) */
 .topAnchor {
   position: relative;
   width: 0;
@@ -139,7 +137,6 @@
   outline: none;
 }
 
-/* Toast: fast plassert øverst – synlig på både lyst og mørkt tema */
 .toast {
   position: fixed;
   top: 1rem;
@@ -151,25 +148,22 @@
   font-weight: 600;
   z-index: 10000;
   border: 1px solid transparent;
-  /* default (lyst tema) */
+
   background: #ffffff;
   color: #1a1a1a;
   border-color: #e5e7eb;
 }
 
-/* Tilpass for mørkt tema (prefers-color-scheme) */
 @media (prefers-color-scheme: dark) {
   .toast {
-    background: #111827; /* mørk grå/blå */
-    color: #f9fafb; /* nesten hvit */
-    border-color: #374151; /* mørk kant */
+    background: #111827;
+    color: #f9fafb;
+    border-color: #374151;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }
 }
 
-/* Semantiske varianter (kan overstyre bakgrunn/border litt) */
 .toastSuccess {
-  /* en lett grønn markering – funker også i dark pga base-farger over */
   box-shadow: 0 10px 30px rgba(16, 185, 129, 0.25);
   border-color: rgba(16, 185, 129, 0.35);
 }

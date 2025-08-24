@@ -1,4 +1,3 @@
-// src/lib/api.ts
 import type { Product } from "../types/onlineShop";
 
 export async function getProducts(): Promise<Product[]> {

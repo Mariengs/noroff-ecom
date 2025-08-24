@@ -5,8 +5,6 @@ import styles from "./CheckoutSuccess.module.css";
 
 export default function CheckoutSuccessPage() {
   const { clear } = useCart();
-
-  // Beskytt mot dobbel kjøring i React 18 StrictMode (dev)
   const cleared = useRef(false);
 
   useEffect(() => {

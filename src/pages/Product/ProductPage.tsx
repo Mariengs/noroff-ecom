@@ -76,18 +76,17 @@ export default function ProductPage() {
     );
   if (!product) return null;
 
-  // Flyttet hit – nå vet TS at product ikke er null
   function handleAdd(): void {
-    if (!product) return; // TS: produkt kan ikke være null under
+    if (!product) return;
 
-    const imageUrl = activeSrc || product.image?.url; // prioritér aktivt bilde
+    const imageUrl = activeSrc || product.image?.url;
 
     add({
       id: product.id,
       title: product.title,
       price: product.price,
       discountedPrice: product.discountedPrice,
-      imageUrl, // 👈 viktig for checkout-bilde
+      imageUrl,
     });
 
     toast.success(`${product.title} added to your cart`, {
