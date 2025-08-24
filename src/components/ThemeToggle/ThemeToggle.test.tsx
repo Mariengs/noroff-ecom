@@ -107,20 +107,20 @@ describe("ThemeToggle", () => {
 
     render(<ThemeToggle />);
 
-    // After mount lagres "light" i localStorage (pga. første useEffect)
+    // After mount, "light" is saved in localStorage (because of initial useEffect)
     expect(
       screen.getByRole("button", { name: /light theme \(click for dark\)/i })
     ).toBeInTheDocument();
 
-    // Simuler at det IKKE finnes lagret tema ved endringstidspunktet:
+    // Simulate that NO theme is saved at the time of change:
     localStorage.removeItem("theme");
 
-    // System bytter til dark -> pakk i act for å flushe setState
+    // System switches to dark -> wrap in act to flush setState
     await act(async () => {
       fireSystemChange(true);
     });
 
-    // Vent til DOM reflekterer ny state
+    // Wait until DOM reflects new state
     expect(
       await screen.findByRole("button", {
         name: /dark theme \(click for light\)/i,

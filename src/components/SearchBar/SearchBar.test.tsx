@@ -1,11 +1,10 @@
-// src/components/SearchBar/SearchBar.test.tsx
 import React, { useState } from "react";
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import SearchBar, { SearchResult } from "./SearchBar";
 
-// Dempe React Router warnings i loggen
+// Suppress React Router warnings in the log
 beforeAll(() => {
   const origWarn = console.warn;
   jest
@@ -20,7 +19,7 @@ beforeAll(() => {
     });
 });
 
-// Mock CSS-modul for stabile classNames
+// Mock CSS module for stable classNames
 jest.mock("./SearchBar.module.css", () => ({
   wrap: "wrap",
   inputWrap: "inputWrap",
@@ -44,7 +43,7 @@ jest.mock("react-router-dom", () => {
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
-// Hjelpekomponent for kontrollert value
+// Helper component for controlled value
 function Harness({
   initial = "",
   results,
@@ -56,7 +55,7 @@ function Harness({
   return (
     <MemoryRouter>
       <SearchBar value={val} onChange={setVal} results={results} />
-      {/* Klikk-område utenfor for å teste "click outside" */}
+      {/* Click area outside to test "click outside" */}
       <div data-testid="outside">outside</div>
     </MemoryRouter>
   );
@@ -72,63 +71,63 @@ describe("SearchBar", () => {
     mockNavigate.mockClear();
   });
 
-  it("skriver i feltet, viser dropdown og Clear-knapp", async () => {
+  it("types into the field, shows dropdown and Clear button", async () => {
     const user = userEvent.setup();
     render(<Harness results={results} />);
 
     const input = screen.getByRole("combobox", { name: /search products/i });
 
-    // Starter tomt
+    // Starts empty
     expect(input).toHaveValue("");
 
-    // Skriv – onChange skal oppdatere verdi
+    // Type – onChange should update value
     await user.type(input, "lam");
     expect(input).toHaveValue("lam");
 
-    // Åpner dropdown når value && results.length
+    // Opens dropdown when value && results.length
     expect(input).toHaveAttribute("aria-expanded", "true");
 
-    // Listbox og to options
+    // Listbox and two options
     const listbox = screen.getByRole("listbox");
     const options = within(listbox).getAllByRole("option");
     expect(options).toHaveLength(2);
     expect(within(listbox).getByText(/lamp shade/i)).toBeInTheDocument();
     expect(within(listbox).getByText(/table lamp/i)).toBeInTheDocument();
 
-    // Clear-knapp synlig
+    // Clear button visible
     expect(
       screen.getByRole("button", { name: /clear search/i })
     ).toBeInTheDocument();
   });
 
-  it("piltaster navigerer i forslag og Enter navigerer til valgt produkt", async () => {
+  it("arrow keys navigate suggestions and Enter navigates to selected product", async () => {
     const user = userEvent.setup();
     render(<Harness results={results} />);
     const input = screen.getByRole("combobox", { name: /search products/i });
 
-    // Åpne via typing
+    // Open via typing
     await user.type(input, "l");
     expect(input).toHaveAttribute("aria-expanded", "true");
 
-    // ArrowDown -> velg første
+    // ArrowDown -> select first
     await user.keyboard("{ArrowDown}");
-    // aria-activedescendant settes; sjekk at en option har aria-selected=true
+    // aria-activedescendant is set; check that one option has aria-selected=true
     let listbox = screen.getByRole("listbox");
     let opts = within(listbox).getAllByRole("option");
     expect(opts[0]).toHaveAttribute("aria-selected", "true");
 
-    // ArrowDown igjen -> andre
+    // ArrowDown again -> second
     await user.keyboard("{ArrowDown}");
     listbox = screen.getByRole("listbox");
     opts = within(listbox).getAllByRole("option");
     expect(opts[1]).toHaveAttribute("aria-selected", "true");
 
-    // Enter -> navigate til /product/b2
+    // Enter -> navigate to /product/b2
     await user.keyboard("{Enter}");
     expect(mockNavigate).toHaveBeenCalledWith("/product/b2");
   });
 
-  it("Escape lukker dropdown", async () => {
+  it("Escape closes dropdown", async () => {
     const user = userEvent.setup();
     render(<Harness results={results} />);
     const input = screen.getByRole("combobox", { name: /search products/i });
@@ -141,7 +140,7 @@ describe("SearchBar", () => {
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
-  it("Clear-knappen tømmer feltet og lukker dropdown", async () => {
+  it("Clear button empties field and closes dropdown", async () => {
     const user = userEvent.setup();
     render(<Harness results={results} />);
     const input = screen.getByRole("combobox", { name: /search products/i });
@@ -153,7 +152,7 @@ describe("SearchBar", () => {
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
-  it("klikk utenfor lukker dropdown", async () => {
+  it("click outside closes dropdown", async () => {
     const user = userEvent.setup();
     render(<Harness results={results} />);
     const input = screen.getByRole("combobox", { name: /search products/i });
@@ -164,7 +163,7 @@ describe("SearchBar", () => {
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
-  it("mouse hover + mousedown på et resultat navigerer riktig", async () => {
+  it("mouse hover + mousedown on a result navigates correctly", async () => {
     const user = userEvent.setup();
     render(<Harness results={results} />);
     const input = screen.getByRole("combobox", { name: /search products/i });
@@ -182,13 +181,13 @@ describe("SearchBar", () => {
     expect(mockNavigate).toHaveBeenCalledWith("/product/a1");
   });
 
-  it("ArrowDown åpner dropdown selv uten fokus-typing når det finnes results", async () => {
+  it("ArrowDown opens dropdown even without typing when results exist", async () => {
     const user = userEvent.setup();
     render(<Harness initial="" results={results} />);
 
     const input = screen.getByRole("combobox", { name: /search products/i });
 
-    // Sørg for fokus først (ellers går tastetrykk til document og treffer ikke inputens onKeyDown)
+    // Ensure focus first (otherwise keystrokes go to document and won’t hit input’s onKeyDown)
     await user.click(input);
 
     await user.keyboard("{ArrowDown}");

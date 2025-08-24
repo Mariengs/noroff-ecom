@@ -1,11 +1,9 @@
-// src/components/ProductCard/ProductCard.test.tsx
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import ProductCard from "./ProductCard";
 
-// Demp React Router v6 -> v7 future-flag warnings
 beforeAll(() => {
   const origWarn = console.warn;
   jest
@@ -54,14 +52,14 @@ describe("ProductCard", () => {
     mockToastSuccess.mockClear();
   });
 
-  it("viser tittel, priser, rabatt-badge og lenke ved rabatt", () => {
+  it("displays title, prices, discount badge and link when discounted", () => {
     renderWithRouter(<ProductCard product={baseProduct as any} />);
 
     expect(
       screen.getByRole("heading", { name: /nordic lamp/i })
     ).toBeInTheDocument();
 
-    // Tåler no-NO: "800,00 kr" og "1 000,00 kr"
+    // Accepts no-NO format: "800,00 kr" and "1 000,00 kr"
     expect(screen.getByText(/800(?:[.,]00)?\s*kr/i)).toBeInTheDocument();
     expect(screen.getByText(/1\s?000(?:[.,]00)?\s*kr/i)).toBeInTheDocument();
 
@@ -70,10 +68,10 @@ describe("ProductCard", () => {
     const viewLink = screen.getByRole("link", { name: /view nordic lamp/i });
     expect(viewLink).toHaveAttribute("href", "/product/p1");
 
-    // (img-sjekk fjernet for stabilitet i testmiljø)
+    // (image check removed for test stability)
   });
 
-  it("legger i handlekurv og viser toast ved klikk", async () => {
+  it("adds to cart and shows toast on click", async () => {
     const user = userEvent.setup();
     renderWithRouter(<ProductCard product={baseProduct as any} />);
 
@@ -91,12 +89,12 @@ describe("ProductCard", () => {
     expect(mockToastSuccess).toHaveBeenCalledWith("Added Nordic Lamp to cart");
   });
 
-  it('viser ikke badge eller "was"-pris uten rabatt', () => {
+  it("does not show badge or 'was' price without discount", () => {
     const noDiscount = { ...baseProduct, discountedPrice: baseProduct.price };
     renderWithRouter(<ProductCard product={noDiscount as any} />);
 
     expect(screen.queryByText(/-%/)).not.toBeInTheDocument();
-    // Valgfritt: sjekk at kun én pris vises (nåpris)
+    // Optional: check that only one price is shown (current price)
     const allPrices = screen.getAllByText(/\d[\d\s]*(?:[.,]\d{2})?\s*kr/i);
     expect(allPrices).toHaveLength(1);
   });

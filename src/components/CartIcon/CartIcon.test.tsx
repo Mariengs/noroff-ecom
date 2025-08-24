@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import CartIcon from "./CartIcon";
 
-// Demper React Router future-flag warnings i testlogg
 beforeAll(() => {
   const origWarn = console.warn;
   jest
@@ -19,7 +18,7 @@ beforeAll(() => {
     });
 });
 
-// Mock CSS-modul med enkle klassenavn så vi kan asserte på className
+// Mock CSS-modul
 jest.mock("./CartIcon.module.css", () => ({
   button: "button",
   bump: "bump",
@@ -34,7 +33,7 @@ jest.mock("../../context/CartContext", () => ({
   useCart: () => ({ totalQty: mockQty }),
 }));
 
-// --- Mock useNavigate for å sjekke navigasjon ---
+// --- Mock useNavigate checks navigation ---
 const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => {
   const actual = jest.requireActual("react-router-dom");

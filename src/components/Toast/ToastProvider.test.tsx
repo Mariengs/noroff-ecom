@@ -52,13 +52,13 @@ function renderWithProvider(ui: React.ReactElement = <Harness />) {
 }
 
 describe("ToastProvider", () => {
-  it("kaster feil hvis useToast brukes utenfor provider", () => {
+  it("throws an error if useToast is used outside of provider", () => {
     const Bad = () => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       useToast();
       return null;
     };
-    // Demp bare denne error-loggen
+    // Suppress only this error log
     const spy = jest.spyOn(console, "error").mockImplementation(() => {});
     expect(() => render(<Bad />)).toThrow(
       /useToast must be used within ToastProvider/i
@@ -66,11 +66,11 @@ describe("ToastProvider", () => {
     spy.mockRestore();
   });
 
-  it("renderer notify/success/error/info med riktig tekst og ikon", async () => {
+  it("renders notify/success/error/info with correct text and icon", async () => {
     const user = userEvent.setup();
     renderWithProvider();
 
-    // notify -> meldingen rendres i .message
+    // notify -> message rendered in .message
     await user.click(screen.getByRole("button", { name: /notify/i }));
     expect(
       screen.getByText("hello", { selector: ".message" })
@@ -90,7 +90,7 @@ describe("ToastProvider", () => {
     ).toBeInTheDocument();
     expect(screen.getAllByText("⚠️").length).toBeGreaterThan(0);
 
-    // info (unngå kollisjon med "info"-knappen)
+    // info (avoid collision with "info" button)
     await user.click(screen.getByRole("button", { name: /info/i }));
     expect(
       screen.getByText("info", { selector: ".message" })
@@ -98,7 +98,7 @@ describe("ToastProvider", () => {
     expect(screen.getAllByText("ℹ️").length).toBeGreaterThan(0);
   });
 
-  it("lukker via Close-knappen (✕)", async () => {
+  it("closes via Close button (✕)", async () => {
     const user = userEvent.setup();
     renderWithProvider();
 
@@ -113,7 +113,7 @@ describe("ToastProvider", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("action-knapp kaller onClick og lukker toasten", async () => {
+  it("action button calls onClick and closes the toast", async () => {
     const user = userEvent.setup();
     renderWithProvider();
 
@@ -128,7 +128,7 @@ describe("ToastProvider", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("auto-dismiss fjerner toasten etter duration", () => {
+  it("auto-dismiss removes toast after duration", () => {
     jest.useFakeTimers();
     renderWithProvider();
 
