@@ -13,24 +13,35 @@ import type { Product } from "../../types/onlineShop";
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>("");
+  const [error, setError] = useState<string | null>(null);
+  const [reloadTick, setReloadTick] = useState(0);
+
   const [query, setQuery] = useState<string>("");
   const [sort, setSort] = useState<SortValue>("default");
 
   useEffect(() => {
-    (async () => {
+    const ac = new AbortController();
+
+    async function load() {
       try {
         setLoading(true);
-        const data = await getProducts();
-        setProducts(Array.isArray(data) ? data : []);
         setError(null);
-      } catch {
-        setError("Could not load products");
+        const data = await getProducts({ signal: ac.signal }); // api.ts støtter signal
+        if (ac.signal.aborted) return; // ⬅️ ikke sett state etter abort
+        setProducts(Array.isArray(data) ? data : []);
+      } catch (e: any) {
+        if (ac.signal.aborted) return; // ⬅️ ikke vis feil hvis abort
+        if (e?.name === "AbortError") return; // ⬅️ ignorer AbortError helt
+        setError(e instanceof Error ? e.message : "Could not load products");
       } finally {
+        if (ac.signal.aborted) return; // ⬅️ unngå å slå av loading etter abort
         setLoading(false);
       }
-    })();
-  }, []);
+    }
+
+    load();
+    return () => ac.abort();
+  }, [reloadTick]);
 
   const filtered = useMemo<Product[]>(() => {
     const q = query.trim().toLowerCase();
@@ -85,7 +96,7 @@ export default function Home() {
       category: Array.isArray(p.tags)
         ? p.tags.slice(0, 3).join(", ")
         : undefined,
-      image: p.image?.url ?? (p as any).image ?? undefined,
+      image: (p as any).image?.url ?? (p as any).image ?? undefined,
       thumbnail: undefined,
     }));
   }, [sorted]);
@@ -94,7 +105,7 @@ export default function Home() {
     return (
       <section className="container--narrow">
         <h1 className="home-title">Products</h1>
-        <p className="home-subtitle">Loading your pastel picks…</p>
+        <p className="home-subtitle">Loading products…⏳</p>
         <div className="grid--products">
           {Array.from({ length: 12 }).map((_, i) => (
             <ProductCardSkeleton key={i} />
@@ -104,12 +115,41 @@ export default function Home() {
     );
   }
 
-  if (error) return <p role="alert">{error}</p>;
+  if (error) {
+    return (
+      <section className="container--narrow">
+        <h1>Products</h1>
+        <div role="alert" style={{ marginTop: "0.5rem" }}>
+          <p style={{ margin: 0 }}>Couldn’t load products.</p>
+          <small style={{ color: "#666" }}>{error}</small>
+        </div>
+        <button
+          className="btn"
+          style={{ marginTop: "1rem" }}
+          onClick={() => setReloadTick((n) => n + 1)}
+        >
+          Try again
+        </button>
+      </section>
+    );
+  }
+
+  if (!sorted.length) {
+    return (
+      <section className="container--narrow">
+        <h1>Products</h1>
+        <p className="home-subtitle">
+          No products matched your search. Try something else 🌸
+        </p>
+        <SearchBar value={query} onChange={setQuery} results={[]} />
+      </section>
+    );
+  }
 
   return (
     <section className="container--narrow">
       <h1>Products</h1>
-      <p className="home-subtitle">Thoughtful products, quietly beautiful.</p>
+      <p className="home-subtitle">Thoughtful products, quietly beautiful</p>
 
       <SearchBar value={query} onChange={setQuery} results={searchResults} />
       <SortButton value={sort} onChange={setSort} />

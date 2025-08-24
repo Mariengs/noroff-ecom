@@ -17,13 +17,16 @@ export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [activeIdx, setActiveIdx] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [reloadTick, setReloadTick] = useState(0); // for “Try again”
 
   useEffect(() => {
-    (async () => {
+    const ac = new AbortController();
+
+    async function load() {
       try {
         setLoading(true);
-        setError("");
+        setError(null);
 
         if (!id) {
           setError("Invalid product id");
@@ -31,16 +34,39 @@ export default function ProductPage() {
           return;
         }
 
-        const data = await getProduct(id); // forventer Product
+        const data = await getProduct(id, {
+          signal: ac.signal,
+          timeoutMs: 15000,
+        });
+        if (ac.signal.aborted) return; // ikke sett state etter abort
+
         setProduct(data);
         setActiveIdx(0);
-      } catch {
-        setError("Could not load product");
+      } catch (e: any) {
+        if (ac.signal.aborted) return; // ignorer abort (StrictMode / navigasjon)
+        if (e?.name === "AbortError") return;
+
+        // 404 → “not found”, ellers vis feilmelding fra Error/ApiError
+        const is404 =
+          e &&
+          typeof e === "object" &&
+          "status" in e &&
+          (e as any).status === 404;
+        if (is404) {
+          setError("Product not found.");
+          setProduct(null);
+        } else {
+          setError(e instanceof Error ? e.message : "Could not load product");
+        }
       } finally {
+        if (ac.signal.aborted) return;
         setLoading(false);
       }
-    })();
-  }, [id]);
+    }
+
+    load();
+    return () => ac.abort();
+  }, [id, reloadTick]);
 
   // Avledede verdier (før early returns)
   const primary = product ? getImageUrl(product) : null;
@@ -67,13 +93,31 @@ export default function ProductPage() {
       ? discountPercent(product.price, product.discountedPrice)
       : 0;
 
-  if (loading) return <p className={s.loading}>Loading…</p>;
-  if (error)
+  if (loading) return <p className={s.loading}>Loading product…⏳</p>;
+
+  if (error) {
     return (
-      <p role="alert" className={s.error}>
-        {error}
-      </p>
+      <section className={s.section}>
+        <div className={s.wrap}>
+          <p role="alert" className={s.error}>
+            {error}
+          </p>
+          <div className={s.ctaRow} style={{ gap: "0.5rem" }}>
+            <button
+              className={s.btn}
+              onClick={() => setReloadTick((n) => n + 1)}
+            >
+              Try again
+            </button>
+            <button className={s.btn} onClick={() => navigate(-1)}>
+              Go back
+            </button>
+          </div>
+        </div>
+      </section>
     );
+  }
+
   if (!product) return null;
 
   function handleAdd(): void {
@@ -97,6 +141,7 @@ export default function ProductPage() {
       },
     });
   }
+
   return (
     <section className={s.section}>
       <div className={s.wrap}>
