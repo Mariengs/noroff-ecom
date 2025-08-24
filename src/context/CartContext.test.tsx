@@ -57,7 +57,7 @@ describe("CartContext", () => {
   beforeEach(() => {
     localStorage.clear();
     jest.restoreAllMocks();
-    // Gjør localStorage.setItem billig (men fortsatt spy-bar)
+    // Make localStorage.setItem cheap (but still spy-able)
     setItemMock = jest
       .spyOn(Storage.prototype, "setItem")
       .mockImplementation(() => {});
@@ -69,7 +69,7 @@ describe("CartContext", () => {
       useCart();
       return null;
     };
-    // Demp kun denne error-loggen
+    // Suppress only this error log
     const spy = jest.spyOn(console, "error").mockImplementation(() => {});
     expect(() => render(<Bad />)).toThrow(
       /useCart must be used within CartProvider/i
@@ -78,7 +78,7 @@ describe("CartContext", () => {
   });
 
   it("initializes from localStorage and normalizes legacy fields", () => {
-    // Seed UTEN setItem (siden setItem er mock'et til no-op)
+    // Seed WITHOUT setItem (since setItem is mocked as no-op)
     (localStorage as any)["cart-v1"] = JSON.stringify({
       items: [
         {
@@ -95,14 +95,14 @@ describe("CartContext", () => {
           qty: 1,
           thumbnail: "thumb-b",
         },
-        { id: "zero", title: "Zero", price: 50, qty: 0 }, // filtreres bort
-        { title: "No ID", price: 10, qty: 1 }, // ugyldig, filtreres
+        { id: "zero", title: "Zero", price: 50, qty: 0 }, // should be filtered out
+        { title: "No ID", price: 10, qty: 1 }, // invalid, filtered
       ],
     });
 
     renderWithProvider();
 
-    // Avledede totaler: 2*100 + 1*200 = 400
+    // Derived totals: 2*100 + 1*200 = 400
     expect(screen.getByTestId("totalQty")).toHaveTextContent("3");
     expect(screen.getByTestId("totalAmount")).toHaveTextContent("400");
   });
@@ -113,10 +113,10 @@ describe("CartContext", () => {
     const addP1 = screen.getByRole("button", { name: /add-p1/i });
     fireEvent.click(addP1);
     expect(screen.getByTestId("totalQty")).toHaveTextContent("1");
-    // discountedPrice 800 brukes
+    // discountedPrice 800 is used
     expect(screen.getByTestId("totalAmount")).toHaveTextContent("800");
 
-    // Legg til samme igjen -> qty 2, amount 1600
+    // Add the same item again -> qty 2, amount 1600
     fireEvent.click(addP1);
     expect(screen.getByTestId("totalQty")).toHaveTextContent("2");
     expect(screen.getByTestId("totalAmount")).toHaveTextContent("1600");
@@ -130,7 +130,7 @@ describe("CartContext", () => {
     expect(screen.getByTestId("totalQty")).toHaveTextContent("3");
     expect(screen.getByTestId("totalAmount")).toHaveTextContent("1500"); // 3 * 500
 
-    // Legg p2 igjen med qty 3 -> 6 totalt
+    // Add p2 again with qty 3 -> total 6
     fireEvent.click(addP2x3);
     expect(screen.getByTestId("totalQty")).toHaveTextContent("6");
     expect(screen.getByTestId("totalAmount")).toHaveTextContent("3000");
@@ -154,7 +154,7 @@ describe("CartContext", () => {
 
     fireEvent.click(decP1);
     fireEvent.click(decP1);
-    // én DEC til fjerner produktet
+    // one more DEC removes the item
     fireEvent.click(decP1);
     expect(screen.getByTestId("totalQty")).toHaveTextContent("0");
     expect(screen.getByTestId("totalAmount")).toHaveTextContent("0");
@@ -172,7 +172,7 @@ describe("CartContext", () => {
     expect(screen.getByTestId("totalQty")).toHaveTextContent("4");
 
     fireEvent.click(removeP2);
-    // kun p1 igjen (qty 1, amount 800)
+    // only p1 remains (qty 1, amount 800)
     expect(screen.getByTestId("totalQty")).toHaveTextContent("1");
     expect(screen.getByTestId("totalAmount")).toHaveTextContent("800");
   });

@@ -45,7 +45,7 @@ export default function CheckoutPage() {
               i.discountedPrice < i.price;
             const lineTotal = unit * i.qty;
 
-            // 👇 robust bilde-henting
+            // robust image resolution
             const imgSrc =
               i.imageUrl ??
               (typeof (i as any).image === "string"
@@ -126,7 +126,16 @@ export default function CheckoutPage() {
                       <button
                         type="button"
                         className={styles.qtyBtn}
-                        onClick={() => inc(i.id)}
+                        onClick={() => {
+                          inc(i.id);
+                          toast.success(`Added 1 × ${i.title}`, {
+                            duration: 2500,
+                            action: {
+                              label: "Undo",
+                              onClick: () => dec(i.id),
+                            },
+                          });
+                        }}
                         aria-label={`Increase quantity of ${i.title}`}
                       >
                         +

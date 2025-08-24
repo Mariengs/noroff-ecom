@@ -10,16 +10,13 @@ body {
   flex-direction: column;
 }
 
-.page {
-  flex: 1 0 auto;
-}
-
 footer {
   margin-top: auto;
   padding-bottom: env(safe-area-inset-bottom);
 }
 
 .page {
+  flex: 1 0 auto;
   display: grid;
   gap: 2rem;
   max-width: 1000px;
