@@ -1,6 +1,3 @@
-/**
- * @jest-environment jsdom
- */
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { CartProvider, useCart } from "./CartContext";
@@ -81,7 +78,7 @@ describe("CartContext", () => {
   });
 
   it("initializes from localStorage and normalizes legacy fields", () => {
-    // Seed UDEN setItem (siden setItem er mock'et til no-op)
+    // Seed UTEN setItem (siden setItem er mock'et til no-op)
     (localStorage as any)["cart-v1"] = JSON.stringify({
       items: [
         {
@@ -205,29 +202,40 @@ describe("CartContext", () => {
     );
   });
 
-  it("normalizes payload image fields into imageUrl", () => {
-    // Rask provider-sjekk ved å dispatch'e ADD_QTY med legacy 'image'
+  it("normalizes payload image fields into imageUrl (no infinite loop)", () => {
     (localStorage as any)["cart-v1"] = JSON.stringify({ items: [] });
+
     function Probe() {
       const { addQty, items } = useCart();
-      React.useEffect(() => {
-        addQty(
-          {
-            id: "x",
-            title: "X",
-            price: 10,
-            image: { url: "legacy-url" },
-          } as any, // unngå type-import
-          1
-        );
-      }, [addQty]);
-      return <div data-testid="imgUrl">{items[0]?.imageUrl ?? ""}</div>;
+      return (
+        <div>
+          <button
+            onClick={() =>
+              addQty(
+                {
+                  id: "x",
+                  title: "X",
+                  price: 10,
+                  image: { url: "legacy-url" },
+                } as any,
+                1
+              )
+            }
+          >
+            add-legacy
+          </button>
+          <div data-testid="imgUrl">{items[0]?.imageUrl ?? ""}</div>
+        </div>
+      );
     }
+
     render(
       <CartProvider>
         <Probe />
       </CartProvider>
     );
+
+    fireEvent.click(screen.getByRole("button", { name: /add-legacy/i }));
     expect(screen.getByTestId("imgUrl")).toHaveTextContent("legacy-url");
   });
 });
