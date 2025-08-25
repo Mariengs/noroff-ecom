@@ -1,4 +1,3 @@
-// src/pages/Product/ProductPage.test.tsx
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
@@ -94,7 +93,7 @@ describe("ProductPage", () => {
 
     renderAt("/product/p1");
 
-    expect(screen.getByText(/loading…/i)).toBeInTheDocument();
+    expect(await screen.findByText(/loading.*…/i)).toBeInTheDocument();
 
     expect(
       await screen.findByRole("heading", { name: /nordic lamp/i })
@@ -122,10 +121,12 @@ describe("ProductPage", () => {
   });
 
   it("handles API error and shows an alert", async () => {
-    mockGetProduct.mockRejectedValueOnce(new Error("boom"));
+    // The component uses the fallback message
+    mockGetProduct.mockRejectedValueOnce({ status: 500 });
+
     renderAt("/product/p1");
 
-    expect(screen.getByText(/loading…/i)).toBeInTheDocument();
+    expect(await screen.findByText(/loading.*…/i)).toBeInTheDocument();
     expect(await screen.findByRole("alert")).toHaveTextContent(
       /could not load product/i
     );

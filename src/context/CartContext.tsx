@@ -7,14 +7,14 @@ import {
   type ReactNode,
 } from "react";
 
-/** Domenetyper */
+/** Domain types */
 export type CartItem = {
   id: string;
   title: string;
   price: number;
   discountedPrice?: number;
-  imageUrl?: string; // <- vi vil alltid fylle denne
-  image?: string; // legacy (string) – mappes til imageUrl
+  imageUrl?: string;
+  image?: string;
   qty: number;
 };
 
@@ -22,11 +22,11 @@ export interface CartState {
   items: CartItem[];
 }
 
-/** Pris-hjelper */
+/** Price helper */
 const activePrice = (i: CartItem) =>
   typeof i.discountedPrice === "number" ? i.discountedPrice : i.price;
 
-/** Hent URL fra string | { url } | annet */
+/** Get URL from string | { url } | else */
 function getImgUrlFromAny(input: unknown): string | undefined {
   if (!input) return undefined;
   if (typeof input === "string") return input;
@@ -37,7 +37,7 @@ function getImgUrlFromAny(input: unknown): string | undefined {
   return undefined;
 }
 
-/** Normaliser payload slik at imageUrl settes */
+/** Normalize payload so that imageUrl is set */
 function normalizePayload(
   payload: Omit<CartItem, "qty">
 ): Omit<CartItem, "qty"> {
@@ -68,7 +68,7 @@ type Action =
   | RemoveAction
   | ClearAction;
 
-/** Context-verdi */
+/** Context value */
 export interface CartContextValue {
   items: CartItem[];
   totalQty: number;
@@ -83,7 +83,7 @@ export interface CartContextValue {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-/** Initial state fra localStorage — normaliser gamle entries */
+/** Initial state from localStorage — normalize old entries */
 const initial = (): CartState => {
   if (typeof window === "undefined") return { items: [] };
   try {
@@ -170,7 +170,7 @@ function reducer(state: CartState, action: Action): CartState {
       return { items: [] };
 
     default: {
-      // Exhaustiveness-sjekk (hindrer "glemte" cases ved endringer)
+      // Exhaustiveness check (prevents "forgotten" cases when making changes)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const _exhaustive: never = action;
       return state;

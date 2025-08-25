@@ -1,7 +1,7 @@
-import React from "react";
 import { render, screen, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ContactPage from "./ContactPage";
+import { ToastProvider } from "../../components/Toast/ToastProvider";
 
 jest.mock(
   "./ContactPage.module.css",
@@ -13,13 +13,21 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
+function renderPage() {
+  return render(
+    <ToastProvider>
+      <ContactPage />
+    </ToastProvider>
+  );
+}
+
 describe("ContactPage", () => {
-  it("holder Submit disabled til alle felter er gyldige, og viser/rydder feltfeil mens man skriver", async () => {
+  it("keeps Submit disabled until all fields are valid, and shows/clears field errors while typing", async () => {
     const user = userEvent.setup();
-    render(<ContactPage />);
+    renderPage();
 
     const submit = screen.getByRole("button", { name: /submit/i });
-    expect(submit).toBeDisabled();
+    expect(submit).toHaveAttribute("aria-disabled", "true");
 
     const fullName = screen.getByLabelText(/full name/i);
     await user.type(fullName, "Al");
@@ -58,16 +66,16 @@ describe("ContactPage", () => {
     await user.clear(message);
     await user.type(message, "This is a valid message.");
 
-    expect(submit).not.toBeDisabled();
+    expect(submit).toHaveAttribute("aria-disabled", "false");
   });
 
-  it("submits gyldig skjema → success-view, toast, scrollTo, fokus på topAnchor, auto-dismiss", async () => {
+  it("submits a valid form → shows success view, toast, scrollTo, focuses on topAnchor, and auto-dismisses toast", async () => {
     jest.useFakeTimers();
     const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
 
     try {
-      render(<ContactPage />);
+      renderPage();
 
       await user.type(screen.getByLabelText(/full name/i), "Alice Wonderland");
       await user.type(screen.getByLabelText(/subject/i), "Hello there");
@@ -78,7 +86,7 @@ describe("ContactPage", () => {
       );
 
       const submit = screen.getByRole("button", { name: /submit/i });
-      expect(submit).not.toBeDisabled();
+      expect(submit).toHaveAttribute("aria-disabled", "false");
 
       await user.click(submit);
 
@@ -89,6 +97,7 @@ describe("ContactPage", () => {
         "alice@example.com"
       );
 
+      // Toast should appear (rendered via ToastProvider)
       expect(
         screen.getByText(/message sent successfully/i)
       ).toBeInTheDocument();
@@ -115,21 +124,21 @@ describe("ContactPage", () => {
     }
   });
 
-  it("Submit forblir disabled når et felt er ugyldig; blir enabled når alt er gyldig", async () => {
+  it("keeps Submit disabled when any field is invalid; enables it when all fields are valid", async () => {
     const user = userEvent.setup();
-    render(<ContactPage />);
+    renderPage();
 
     const submit = screen.getByRole("button", { name: /submit/i });
-    expect(submit).toBeDisabled();
+    expect(submit).toHaveAttribute("aria-disabled", "true");
 
     await user.type(screen.getByLabelText(/full name/i), "Bob");
     await user.type(screen.getByLabelText(/subject/i), "Ok");
     await user.type(screen.getByLabelText(/email/i), "bob@example.com");
     await user.type(screen.getByLabelText(/message/i), "Long enough message");
-    expect(submit).toBeDisabled();
+    expect(submit).toHaveAttribute("aria-disabled", "true");
 
     await user.clear(screen.getByLabelText(/subject/i));
     await user.type(screen.getByLabelText(/subject/i), "Okay");
-    expect(submit).not.toBeDisabled();
+    expect(submit).toHaveAttribute("aria-disabled", "false");
   });
 });

@@ -1,4 +1,5 @@
-import { useId, useState, useEffect, useMemo, useRef } from "react";
+import { useId, useState, useEffect, useRef } from "react";
+import { useToast } from "../../components/Toast/ToastProvider";
 import s from "./ContactPage.module.css";
 
 type FormValues = {
@@ -9,7 +10,6 @@ type FormValues = {
 };
 
 type FormErrors = Partial<Record<keyof FormValues, string>>;
-type Toast = { type: "success" | "error"; message: string } | null;
 
 function isEmail(v: string): boolean {
   return /.+@.+\..+/.test(v);
@@ -30,6 +30,8 @@ function validate(v: FormValues): FormErrors {
 
 export default function ContactPage() {
   const id = useId();
+  const toast = useToast();
+
   const [values, setValues] = useState<FormValues>({
     fullName: "",
     subject: "",
@@ -39,26 +41,18 @@ export default function ContactPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [sent, setSent] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [toast, setToast] = useState<Toast>(null);
 
   const topRef = useRef<HTMLDivElement>(null);
-  const hasErrors = useMemo(
-    () => Object.keys(validate(values)).length > 0,
-    [values]
-  );
 
-  useEffect(() => {
-    if (!toast) return;
-    const t = setTimeout(() => setToast(null), 5000);
-    return () => clearTimeout(t);
-  }, [toast]);
+  const hasErrors = Object.keys(validate(values)).length > 0;
+  const canSubmit = !hasErrors && !submitting;
 
   useEffect(() => {
     if (sent) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       setTimeout(() => topRef.current?.focus(), 50);
     }
-  }, [sent, toast]);
+  }, [sent]);
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -76,25 +70,25 @@ export default function ContactPage() {
     });
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function handleTrySubmit() {
+    if (submitting) return;
+
+    // Full validation
     const eobj = validate(values);
     setErrors(eobj);
 
     if (Object.keys(eobj).length > 0) {
-      setToast({
-        type: "error",
-        message: "Please fix the highlighted errors.",
-      });
+      toast.error("Please fix the highlighted errors.", { duration: 4000 });
       return;
     }
 
     try {
       setSubmitting(true);
-      // Send to API if desired
-      console.log("Contact form data:", values);
+
+      // console.log("Contact form data:", values);
+
       setSent(true);
-      setToast({ type: "success", message: "Message sent successfully!" });
+      toast.success("Message sent successfully!", { duration: 3000 });
     } finally {
       setSubmitting(false);
     }
@@ -109,19 +103,6 @@ export default function ContactPage() {
         className={s.topAnchor}
         data-testid="topAnchor"
       />
-
-      {toast && (
-        <div
-          className={`${s.toast} ${
-            toast.type === "success" ? s.toastSuccess : s.toastError
-          }`}
-          role="status"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {toast.message}
-        </div>
-      )}
 
       <div className={s.wrap}>
         <h1 className={s.title}>Contact</h1>
@@ -140,7 +121,7 @@ export default function ContactPage() {
           </div>
         ) : (
           <div className={s.card}>
-            <form className={s.form} onSubmit={handleSubmit} noValidate>
+            <form className={s.form} noValidate>
               {/* Full name */}
               <div className={s.row}>
                 <label className={s.label} htmlFor={`${id}-fullName`}>
@@ -151,7 +132,9 @@ export default function ContactPage() {
                 </label>
                 <input
                   id={`${id}-fullName`}
-                  className={s.input}
+                  className={`${s.input} ${
+                    errors.fullName ? s.inputError : ""
+                  }`}
                   name="fullName"
                   value={values.fullName}
                   onChange={handleChange}
@@ -184,7 +167,7 @@ export default function ContactPage() {
                 </label>
                 <input
                   id={`${id}-subject`}
-                  className={s.input}
+                  className={`${s.input} ${errors.subject ? s.inputError : ""}`}
                   name="subject"
                   value={values.subject}
                   onChange={handleChange}
@@ -216,7 +199,7 @@ export default function ContactPage() {
                 </label>
                 <input
                   id={`${id}-email`}
-                  className={s.input}
+                  className={`${s.input} ${errors.email ? s.inputError : ""}`}
                   name="email"
                   type="email"
                   value={values.email}
@@ -251,7 +234,7 @@ export default function ContactPage() {
                 </label>
                 <textarea
                   id={`${id}-body`}
-                  className={s.textarea}
+                  className={`${s.textarea} ${errors.body ? s.inputError : ""}`}
                   name="body"
                   value={values.body}
                   onChange={handleChange}
@@ -274,9 +257,10 @@ export default function ContactPage() {
               {/* Actions */}
               <div className={s.actions}>
                 <button
-                  className={s.btn}
-                  type="submit"
-                  disabled={submitting || hasErrors}
+                  type="button"
+                  className={`${s.btn} ${!canSubmit ? s.btnDisabled : ""}`}
+                  onClick={handleTrySubmit}
+                  aria-disabled={!canSubmit}
                 >
                   {submitting ? "Sending…" : "Submit"}
                 </button>

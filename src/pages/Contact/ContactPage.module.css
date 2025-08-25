@@ -172,3 +172,13 @@
   box-shadow: 0 10px 30px rgba(239, 68, 68, 0.25);
   border-color: rgba(239, 68, 68, 0.35);
 }
+
+.btnDisabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
+.btn[aria-disabled="true"]:hover {
+  transform: none; /* hvis du har hover-effekt */
+  box-shadow: none;
+}
