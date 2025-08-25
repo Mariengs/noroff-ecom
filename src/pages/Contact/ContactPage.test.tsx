@@ -97,7 +97,6 @@ describe("ContactPage", () => {
         "alice@example.com"
       );
 
-      // Toast should appear (rendered via ToastProvider)
       expect(
         screen.getByText(/message sent successfully/i)
       ).toBeInTheDocument();

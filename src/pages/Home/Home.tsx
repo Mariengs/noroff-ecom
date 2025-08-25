@@ -9,6 +9,24 @@ import SortButton, {
   type SortValue,
 } from "../../components/SortButton/SortButton";
 import type { Product } from "../../types/onlineShop";
+import styles from "./Home.module.css";
+import logoSrc from "../../assets/logo.svg";
+
+function Title({
+  as: Tag = "h1",
+  className = "",
+}: {
+  as?: keyof JSX.IntrinsicElements;
+  className?: string;
+}) {
+  const cls = [styles.homeTitle, className].filter(Boolean).join(" ");
+  return (
+    <Tag className={cls}>
+      <img src={logoSrc} alt="LumiShop logo" className={styles.logo} />
+      LumiShop
+    </Tag>
+  );
+}
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,15 +44,15 @@ export default function Home() {
       try {
         setLoading(true);
         setError(null);
-        const data = await getProducts({ signal: ac.signal }); // api.ts støtter signal
-        if (ac.signal.aborted) return; // ⬅️ ikke sett state etter abort
+        const data = await getProducts({ signal: ac.signal });
+        if (ac.signal.aborted) return;
         setProducts(Array.isArray(data) ? data : []);
       } catch (e: any) {
-        if (ac.signal.aborted) return; // ⬅️ ikke vis feil hvis abort
-        if (e?.name === "AbortError") return; // ⬅️ ignorer AbortError helt
+        if (ac.signal.aborted) return;
+        if (e?.name === "AbortError") return;
         setError(e instanceof Error ? e.message : "Could not load products");
       } finally {
-        if (ac.signal.aborted) return; // ⬅️ unngå å slå av loading etter abort
+        if (ac.signal.aborted) return;
         setLoading(false);
       }
     }
@@ -104,7 +122,7 @@ export default function Home() {
   if (loading) {
     return (
       <section className="container--narrow">
-        <h1 className="home-title">Products</h1>
+        <Title as="h1" />
         <p className="home-subtitle">Loading products…⏳</p>
         <div className="grid--products">
           {Array.from({ length: 12 }).map((_, i) => (
@@ -118,7 +136,7 @@ export default function Home() {
   if (error) {
     return (
       <section className="container--narrow">
-        <h1>Products</h1>
+        <Title as="h1" />
         <div role="alert" style={{ marginTop: "0.5rem" }}>
           <p style={{ margin: 0 }}>Couldn’t load products.</p>
           <small style={{ color: "#666" }}>{error}</small>
@@ -137,7 +155,7 @@ export default function Home() {
   if (!sorted.length) {
     return (
       <section className="container--narrow">
-        <h1>Products</h1>
+        <Title as="h1" />
         <p className="home-subtitle">
           No products matched your search. Try something else 🌸
         </p>
@@ -148,7 +166,7 @@ export default function Home() {
 
   return (
     <section className="container--narrow">
-      <h1>Products</h1>
+      <Title as="h1" />
       <p className="home-subtitle">Thoughtful products, quietly beautiful</p>
 
       <SearchBar value={query} onChange={setQuery} results={searchResults} />
@@ -159,8 +177,8 @@ export default function Home() {
           <ProductCard
             key={p.id}
             product={p}
-            primaryBtnClass="btn btn-primary" // View product
-            cartBtnClass="btn btn-cart" // Add to cart
+            primaryBtnClass="btn btn-primary"
+            cartBtnClass="btn btn-cart"
           />
         ))}
       </div>

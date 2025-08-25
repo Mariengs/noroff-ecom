@@ -1,6 +1,5 @@
 import type { Product } from "../types/onlineShop";
 
-/** Error med status, url og ev. body for debugging */
 export class ApiError extends Error {
   status: number;
   url: string;

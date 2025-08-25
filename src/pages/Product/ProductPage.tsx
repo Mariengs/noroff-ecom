@@ -177,7 +177,7 @@ export default function ProductPage() {
             )}
           </div>
 
-          {/* Info-kort */}
+          {/* Info-card*/}
           <div className={s.infoCard}>
             <h1 className={s.title}>{product.title}</h1>
 

@@ -1,0 +1,9 @@
+.homeTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.logo {
+  width: 40px;
+  height: auto;
+}

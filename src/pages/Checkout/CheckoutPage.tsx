@@ -45,7 +45,6 @@ export default function CheckoutPage() {
               i.discountedPrice < i.price;
             const lineTotal = unit * i.qty;
 
-            // robust image resolution
             const imgSrc =
               i.imageUrl ??
               (typeof (i as any).image === "string"
