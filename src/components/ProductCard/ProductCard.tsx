@@ -7,9 +7,17 @@ import { useToast } from "../Toast/ToastProvider";
 
 type Props = {
   product: Product;
+  /** f.eks. "btn btn-primary" — brukes for "View product" */
+  primaryBtnClass?: string;
+  /** f.eks. "btn btn-cart" — brukes for "Add to cart" */
+  cartBtnClass?: string;
 };
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({
+  product,
+  primaryBtnClass = "btn btn-primary",
+  cartBtnClass = "btn btn-cart",
+}: Props) {
   const { id, title, price, discountedPrice = price } = product;
   const { add } = useCart();
   const toast = useToast();
@@ -63,7 +71,7 @@ export default function ProductCard({ product }: Props) {
 
         <div className={styles.actions}>
           <Link
-            className={`btn btn-primary ${styles.button}`}
+            className={`${primaryBtnClass} ${styles.button}`}
             to={`/product/${id}`}
             aria-label={`View ${title}`}
           >
@@ -72,7 +80,7 @@ export default function ProductCard({ product }: Props) {
 
           <button
             type="button"
-            className={`btn ${styles.button}`}
+            className={`${cartBtnClass} ${styles.button}`}
             onClick={handleAddToCart}
             aria-label={`Add ${title} to cart`}
           >

@@ -156,7 +156,12 @@ export default function Home() {
 
       <div className="grid--products">
         {sorted.map((p) => (
-          <ProductCard key={p.id} product={p} />
+          <ProductCard
+            key={p.id}
+            product={p}
+            primaryBtnClass="btn btn-primary" // View product
+            cartBtnClass="btn btn-cart" // Add to cart
+          />
         ))}
       </div>
     </section>

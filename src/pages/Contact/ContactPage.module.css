@@ -84,34 +84,78 @@
   text-align: center;
 }
 
+/* === Knapp: matcher checkout-stil === */
 .btn {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
   max-width: 220px;
   margin: 0 auto;
-  padding: 0.9rem 1.2rem;
-  border-radius: 12px;
-  font-weight: 700;
+
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+
+  background: linear-gradient(135deg, #0ea5e9, #22c55e);
+  color: #fff;
+
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
 
-  background: var(--brand-2);
-  color: var(--text);
-  border: 2px solid color-mix(in srgb, var(--brand-2) 70%, var(--text) 20%);
-  box-shadow: var(--shadow-md);
-  transition: background 0.25s ease, transform 0.15s ease;
+  transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn:hover {
-  background: var(--brand);
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
 .btn:active {
-  transform: scale(0.97);
+  transform: translateY(0) scale(0.98);
+  filter: brightness(0.98);
 }
 
 .btn:focus-visible {
-  outline: 3px solid var(--ring);
+  outline: 3px solid color-mix(in srgb, #0ea5e9 55%, #ffffff 45%);
   outline-offset: 2px;
+}
+
+/* Disabled (native + aria) */
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+  box-shadow: none;
+}
+.btn[aria-disabled="true"]:hover,
+.btn:disabled:hover {
+  transform: none;
+  filter: none;
+  box-shadow: none;
+}
+
+/* Litt dempet i dark-mode så den ikke blir for neon */
+:global([data-theme="dark"]) .btn {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, #0ea5e9 85%, #000 15%),
+    color-mix(in srgb, #22c55e 85%, #000 15%)
+  );
+}
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme])) .btn {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, #0ea5e9 85%, #000 15%),
+      color-mix(in srgb, #22c55e 85%, #000 15%)
+    );
+  }
 }
 
 @media (max-width: 560px) {
@@ -173,12 +217,13 @@
   border-color: rgba(239, 68, 68, 0.35);
 }
 
+/* Beholder .btnDisabled klassen om du bruker aria-disabled i React */
 .btnDisabled {
   opacity: 0.6;
   cursor: not-allowed;
   filter: grayscale(0.2);
 }
 .btn[aria-disabled="true"]:hover {
-  transform: none; /* hvis du har hover-effekt */
+  transform: none;
   box-shadow: none;
 }

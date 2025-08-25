@@ -179,8 +179,15 @@ export default function CheckoutPage() {
             type="button"
             className={styles.checkoutBtn}
             onClick={() => {
-              toast.success("Checkout complete! 🎉", { duration: 3500 });
-              navigate("/success");
+              try {
+                items.forEach((i) => remove(i.id));
+                localStorage.removeItem("cart");
+                toast.success("Checkout complete! 🎉", { duration: 3500 });
+                navigate("/success");
+              } catch (e) {
+                toast.error("Noe gikk galt under checkout.");
+                console.error(e);
+              }
             }}
             aria-label="Proceed to checkout"
           >

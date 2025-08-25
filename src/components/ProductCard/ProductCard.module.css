@@ -16,20 +16,24 @@
 .media {
   position: relative;
   background: linear-gradient(135deg, #f9f8ff, #f6fffb);
-  min-height: 110px;
-  display: grid;
-  place-items: center;
+  height: 200px; /* 🔹 fast høyde for alle kort */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
+
 .media img {
   width: 100%;
-  height: 150px;
-  object-fit: cover;
+  height: 100%;
+  object-fit: cover; /* 🔹 fyller hele kortet, beskjærer hvis nødvendig */
   display: block;
   border-bottom: 1px solid var(--border);
 }
+
 .placeholder {
   width: 100%;
-  height: 150px;
+  height: 200px; /* samme høyde som media */
   background: #f7f7fb;
 }
 
@@ -78,4 +82,23 @@
   color: var(--muted);
   text-decoration: line-through;
   font-size: 0.9rem;
+}
+
+/* ▼ Buttons area */
+.actions {
+  display: grid; /* alltid under hverandre */
+  gap: 8px; /* mellomrom mellom knappene */
+  margin-top: 8px;
+}
+
+/* Knappestørrelse + sentrering */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* sentrer tekst */
+  text-align: center;
+  inline-size: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font-size: 0.95rem;
 }
