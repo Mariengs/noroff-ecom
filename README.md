@@ -13,7 +13,6 @@ It demonstrates fetching products from an API, searching, sorting, viewing detai
 - Automatic price calculation with discounts
 - Checkout flow with order confirmation
 - Persistent cart stored in `localStorage`
-- Responsive design with a clean layout
 
 ---
 

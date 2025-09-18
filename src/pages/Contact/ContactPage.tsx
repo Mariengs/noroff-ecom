@@ -42,7 +42,11 @@ export default function ContactPage() {
   const [sent, setSent] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
+  // Anker på toppen (ikke skjult for AT, ikke fokus-mål)
   const topRef = useRef<HTMLDivElement>(null);
+  // Fokusmål: overskrifter
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const successRef = useRef<HTMLHeadingElement>(null);
 
   const hasErrors = Object.keys(validate(values)).length > 0;
   const canSubmit = !hasErrors && !submitting;
@@ -50,7 +54,8 @@ export default function ContactPage() {
   useEffect(() => {
     if (sent) {
       window.scrollTo({ top: 0, behavior: "smooth" });
-      setTimeout(() => topRef.current?.focus(), 50);
+      // Flytt fokus til suksess-overskrift (synlig for hjelpemidler)
+      setTimeout(() => successRef.current?.focus(), 50);
     }
   }, [sent]);
 
@@ -99,13 +104,14 @@ export default function ContactPage() {
       <div
         ref={topRef}
         tabIndex={-1}
-        aria-hidden="true"
         className={s.topAnchor}
         data-testid="topAnchor"
       />
 
       <div className={s.wrap}>
-        <h1 className={s.title}>Contact</h1>
+        <h1 className={s.title} ref={headingRef} tabIndex={-1}>
+          Contact
+        </h1>
 
         {sent ? (
           <div
@@ -114,7 +120,9 @@ export default function ContactPage() {
             aria-live="polite"
             aria-atomic="true"
           >
-            <h2>Thanks! We received your message.</h2>
+            <h2 ref={successRef} tabIndex={-1}>
+              Thanks! We received your message.
+            </h2>
             <p className={s.helper}>
               We’ll get back to you at <strong>{values.email}</strong>.
             </p>
