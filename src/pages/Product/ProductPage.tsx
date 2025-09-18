@@ -38,15 +38,15 @@ export default function ProductPage() {
           signal: ac.signal,
           timeoutMs: 15000,
         });
-        if (ac.signal.aborted) return; // ikke sett state etter abort
+        if (ac.signal.aborted) return;
 
         setProduct(data);
         setActiveIdx(0);
       } catch (e: any) {
-        if (ac.signal.aborted) return; // ignorer abort (StrictMode / navigasjon)
+        if (ac.signal.aborted) return;
         if (e?.name === "AbortError") return;
 
-        // 404 → “not found”, ellers vis feilmelding fra Error/ApiError
+        // 404 → “not found”, else show error message
         const is404 =
           e &&
           typeof e === "object" &&
@@ -72,7 +72,7 @@ export default function ProductPage() {
   const primary = product ? getImageUrl(product) : null;
   const altText = product?.image?.alt || product?.title || "";
 
-  // API-et har i praksis ett bilde; galleri for ev. fremtid
+  // API got one image; gallery for later
   const gallery = useMemo<string[]>(
     () => (primary ? [primary] : []),
     [primary]

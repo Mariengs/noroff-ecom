@@ -57,7 +57,7 @@ describe("CartContext", () => {
   beforeEach(() => {
     localStorage.clear();
     jest.restoreAllMocks();
-    // Make localStorage.setItem cheap (but still spy-able)
+
     setItemMock = jest
       .spyOn(Storage.prototype, "setItem")
       .mockImplementation(() => {});
@@ -65,11 +65,10 @@ describe("CartContext", () => {
 
   it("throws if useCart is used outside CartProvider", () => {
     const Bad = () => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       useCart();
       return null;
     };
-    // Suppress only this error log
+
     const spy = jest.spyOn(console, "error").mockImplementation(() => {});
     expect(() => render(<Bad />)).toThrow(
       /useCart must be used within CartProvider/i
@@ -78,7 +77,6 @@ describe("CartContext", () => {
   });
 
   it("initializes from localStorage and normalizes legacy fields", () => {
-    // Seed WITHOUT setItem (since setItem is mocked as no-op)
     (localStorage as any)["cart-v1"] = JSON.stringify({
       items: [
         {
@@ -95,14 +93,14 @@ describe("CartContext", () => {
           qty: 1,
           thumbnail: "thumb-b",
         },
-        { id: "zero", title: "Zero", price: 50, qty: 0 }, // should be filtered out
-        { title: "No ID", price: 10, qty: 1 }, // invalid, filtered
+        { id: "zero", title: "Zero", price: 50, qty: 0 },
+        { title: "No ID", price: 10, qty: 1 },
       ],
     });
 
     renderWithProvider();
 
-    // Derived totals: 2*100 + 1*200 = 400
+    // Derived totals
     expect(screen.getByTestId("totalQty")).toHaveTextContent("3");
     expect(screen.getByTestId("totalAmount")).toHaveTextContent("400");
   });

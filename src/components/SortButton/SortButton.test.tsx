@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SortButton, { SortOption, SortValue } from "./SortButton";
 
-// Mock CSS module for stable class names (not used in assertions)
+// Mock CSS module for stable class names
 jest.mock("./SortButton.module.css", () => ({
   wrap: "wrap",
   button: "button",
@@ -72,7 +72,7 @@ describe("SortButton", () => {
     expect(btn).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
 
-    // Button should now show the new label
+    // Button should show the new label
     expect(
       screen.getByRole("button", { name: /title a → z/i })
     ).toBeInTheDocument();

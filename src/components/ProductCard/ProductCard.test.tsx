@@ -67,8 +67,6 @@ describe("ProductCard", () => {
 
     const viewLink = screen.getByRole("link", { name: /view nordic lamp/i });
     expect(viewLink).toHaveAttribute("href", "/product/p1");
-
-    // (image check removed for test stability)
   });
 
   it("adds to cart and shows toast on click", async () => {
@@ -94,7 +92,7 @@ describe("ProductCard", () => {
     renderWithRouter(<ProductCard product={noDiscount as any} />);
 
     expect(screen.queryByText(/-%/)).not.toBeInTheDocument();
-    // Optional: check that only one price is shown (current price)
+    // Check that only one price is shown (current price)
     const allPrices = screen.getAllByText(/\d[\d\s]*(?:[.,]\d{2})?\s*kr/i);
     expect(allPrices).toHaveLength(1);
   });

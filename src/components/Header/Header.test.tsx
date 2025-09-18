@@ -1,10 +1,8 @@
-// src/components/Header/Header.test.tsx
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Header from "./Header";
 
-// Suppress router future-flag warnings in the logs (optional)
 beforeAll(() => {
   const origWarn = console.warn;
   jest
@@ -19,7 +17,7 @@ beforeAll(() => {
     });
 });
 
-// Mock the CSS module for predictable class names
+// Mock CSS
 jest.mock("./Header.module.css", () => ({
   header: "header",
   nav: "nav",
@@ -30,7 +28,7 @@ jest.mock("./Header.module.css", () => ({
   active: "active",
 }));
 
-// Mock child components for simpler tests
+// Mock child components
 jest.mock("../CartIcon/CartIcon", () => () => <div>CartIcon</div>);
 jest.mock("../ThemeToggle/ThemeToggle", () => () => (
   <button type="button" aria-label="Theme toggle">
@@ -38,7 +36,7 @@ jest.mock("../ThemeToggle/ThemeToggle", () => () => (
   </button>
 ));
 
-// (optional) Mock SVG import if needed in your setup
+// Mock SVG import
 jest.mock("../../assets/logo.svg", () => "logo.svg");
 
 function renderHeaderAt(pathname: string = "/") {

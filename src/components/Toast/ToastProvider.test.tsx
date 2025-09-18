@@ -54,7 +54,6 @@ function renderWithProvider(ui: React.ReactElement = <Harness />) {
 describe("ToastProvider", () => {
   it("throws an error if useToast is used outside of provider", () => {
     const Bad = () => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       useToast();
       return null;
     };
@@ -90,7 +89,7 @@ describe("ToastProvider", () => {
     ).toBeInTheDocument();
     expect(screen.getAllByText("⚠️").length).toBeGreaterThan(0);
 
-    // info (avoid collision with "info" button)
+    // info
     await user.click(screen.getByRole("button", { name: /info/i }));
     expect(
       screen.getByText("info", { selector: ".message" })

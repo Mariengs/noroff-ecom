@@ -105,7 +105,7 @@ describe("CartIcon", () => {
   });
 
   it("navigerer til /checkout når man klikker", async () => {
-    const user = userEvent.setup(); // nå ekte timere -> ingen deadlock
+    const user = userEvent.setup();
     mockQty = 2;
     renderWithRouter();
 

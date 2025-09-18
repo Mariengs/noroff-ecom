@@ -84,7 +84,6 @@
   text-align: center;
 }
 
-/* === Knapp: matcher checkout-stil === */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -124,7 +123,6 @@
   outline-offset: 2px;
 }
 
-/* Disabled (native + aria) */
 .btn:disabled,
 .btn[aria-disabled="true"] {
   opacity: 0.65;
@@ -140,7 +138,6 @@
   box-shadow: none;
 }
 
-/* Litt dempet i dark-mode så den ikke blir for neon */
 :global([data-theme="dark"]) .btn {
   background: linear-gradient(
     135deg,
@@ -217,7 +214,6 @@
   border-color: rgba(239, 68, 68, 0.35);
 }
 
-/* Beholder .btnDisabled klassen om du bruker aria-disabled i React */
 .btnDisabled {
   opacity: 0.6;
   cursor: not-allowed;

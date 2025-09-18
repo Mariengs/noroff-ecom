@@ -7,9 +7,7 @@ import { useToast } from "../Toast/ToastProvider";
 
 type Props = {
   product: Product;
-  /** f.eks. "btn btn-primary" — brukes for "View product" */
   primaryBtnClass?: string;
-  /** f.eks. "btn btn-cart" — brukes for "Add to cart" */
   cartBtnClass?: string;
 };
 

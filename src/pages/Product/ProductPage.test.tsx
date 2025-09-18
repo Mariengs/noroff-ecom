@@ -4,7 +4,7 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import ProductPage from "./ProductPage";
 
-// --- CSS module mock (stable class names) ---
+// CSS module mock
 jest.mock(
   "./ProductPage.module.css",
   () =>
@@ -16,7 +16,7 @@ jest.mock(
     )
 );
 
-// --- Mocks (note the 'mock' prefix to satisfy Jest) ---
+// Mocks
 const mockGetProduct = jest.fn();
 jest.mock("../../lib/api", () => ({
   getProduct: (...args: any[]) => mockGetProduct(...args),
@@ -38,7 +38,7 @@ jest.mock("react-router-dom", () => {
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
-// (Optional) Silence React Router future-flag warnings
+// Silence React Router future-flag warnings
 beforeAll(() => {
   const origWarn = console.warn;
   jest
@@ -53,7 +53,7 @@ beforeAll(() => {
     });
 });
 
-// --- Helpers ---
+// Helpers
 function renderAt(path = "/product/p1") {
   return render(
     <MemoryRouter initialEntries={[path]}>
@@ -79,7 +79,6 @@ const product = {
   ],
 } as const;
 
-// --- Tests ---
 describe("ProductPage", () => {
   beforeEach(() => {
     mockGetProduct.mockReset();

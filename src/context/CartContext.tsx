@@ -170,7 +170,6 @@ function reducer(state: CartState, action: Action): CartState {
       return { items: [] };
 
     default: {
-      // Exhaustiveness check (prevents "forgotten" cases when making changes)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const _exhaustive: never = action;
       return state;

@@ -1,9 +1,8 @@
-// src/components/ThemeToggle/ThemeToggle.test.tsx
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ThemeToggle from "./ThemeToggle";
 
-// Mock CSS module to keep DOM stable
+// Mock CSS module
 jest.mock("./ThemeToggle.module.css", () => ({
   toggle: "toggle",
   icon: "icon",
@@ -11,7 +10,7 @@ jest.mock("./ThemeToggle.module.css", () => ({
 
 type MQListener = (ev?: MediaQueryListEvent) => void;
 
-let currentMQ: any = null; // hold the same object used by the component
+let currentMQ: any = null;
 const listeners: MQListener[] = [];
 
 function setMatchMedia(matches: boolean) {
@@ -24,13 +23,12 @@ function setMatchMedia(matches: boolean) {
       const i = listeners.indexOf(cb);
       if (i >= 0) listeners.splice(i, 1);
     },
-    // legacy no-ops
+
     addListener: () => {},
     removeListener: () => {},
     dispatchEvent: () => true,
   };
 
-  // Must be set before rendering component
   window.matchMedia = jest.fn().mockImplementation(() => currentMQ);
 }
 
@@ -53,7 +51,7 @@ describe("ThemeToggle", () => {
 
   it("uses saved theme from localStorage on first render", () => {
     localStorage.setItem("theme", "dark");
-    setMatchMedia(false); // shouldn't matter when saved exists
+    setMatchMedia(false);
 
     render(<ThemeToggle />);
 
@@ -65,7 +63,7 @@ describe("ThemeToggle", () => {
 
   it("uses system preference when no saved theme", () => {
     localStorage.removeItem("theme");
-    setMatchMedia(true); // system prefers dark
+    setMatchMedia(true);
 
     render(<ThemeToggle />);
 
@@ -101,13 +99,12 @@ describe("ThemeToggle", () => {
   });
 
   it("reacts to system color-scheme changes when no saved theme", async () => {
-    // Start without saved theme; system = light
     localStorage.removeItem("theme");
     setMatchMedia(false);
 
     render(<ThemeToggle />);
 
-    // After mount, "light" is saved in localStorage (because of initial useEffect)
+    // After mount, "light" is saved in localStorage
     expect(
       screen.getByRole("button", { name: /light theme \(click for dark\)/i })
     ).toBeInTheDocument();

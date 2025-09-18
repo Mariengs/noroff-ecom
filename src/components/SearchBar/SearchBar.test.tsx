@@ -187,7 +187,7 @@ describe("SearchBar", () => {
 
     const input = screen.getByRole("combobox", { name: /search products/i });
 
-    // Ensure focus first (otherwise keystrokes go to document and won’t hit input’s onKeyDown)
+    // Ensure focus first
     await user.click(input);
 
     await user.keyboard("{ArrowDown}");
