@@ -1,6 +1,6 @@
 # LumiShop – Noroff E-commerce Project
 
-![Forside](src/assets/Skjermbilde%202025-09-26%20kl.%2013.46.33.png)
+<img src="/src/assets/Skjermbilde 2025-09-26 kl. 13.46.33.png" alt="Forside" width="300">
 
 This is a simple e-commerce frontend project built with **React + TypeScript** as part of the Noroff course.  
 It demonstrates fetching products from an API, searching, sorting, viewing details, adding items to a shopping cart, and completing a checkout flow.
