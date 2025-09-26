@@ -26,7 +26,6 @@ export interface CartState {
 const activePrice = (i: CartItem) =>
   typeof i.discountedPrice === "number" ? i.discountedPrice : i.price;
 
-/** Get URL from string | { url } | else */
 function getImgUrlFromAny(input: unknown): string | undefined {
   if (!input) return undefined;
   if (typeof input === "string") return input;

@@ -18,7 +18,7 @@ export default function ProductPage() {
   const [activeIdx, setActiveIdx] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [reloadTick, setReloadTick] = useState(0); // for “Try again”
+  const [reloadTick, setReloadTick] = useState(0);
 
   useEffect(() => {
     const ac = new AbortController();
@@ -46,7 +46,6 @@ export default function ProductPage() {
         if (ac.signal.aborted) return;
         if (e?.name === "AbortError") return;
 
-        // 404 → “not found”, else show error message
         const is404 =
           e &&
           typeof e === "object" &&
@@ -68,7 +67,6 @@ export default function ProductPage() {
     return () => ac.abort();
   }, [id, reloadTick]);
 
-  // Avledede verdier (før early returns)
   const primary = product ? getImageUrl(product) : null;
   const altText = product?.image?.alt || product?.title || "";
 

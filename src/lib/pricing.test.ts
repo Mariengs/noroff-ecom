@@ -22,12 +22,12 @@ describe("formatNOK", () => {
 describe("discountPercent", () => {
   it("returns rounded percent discount when valid", () => {
     expect(discountPercent(1000, 800)).toBe(20);
-    expect(discountPercent(999, 899)).toBe(10); // 10.01 → 10 after round
+    expect(discountPercent(999, 899)).toBe(10);
   });
 
   it("returns 0 when no discount or discount is negative", () => {
     expect(discountPercent(1000, 1000)).toBe(0); // no discount
-    expect(discountPercent(1000, 1200)).toBe(0); // 'discount' higher than price → clamp to 0
+    expect(discountPercent(1000, 1200)).toBe(0); // negative discount
   });
 
   it("returns 0 for invalid inputs", () => {

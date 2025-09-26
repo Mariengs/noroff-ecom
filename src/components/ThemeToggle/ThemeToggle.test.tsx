@@ -33,9 +33,8 @@ function setMatchMedia(matches: boolean) {
 }
 
 function fireSystemChange(toMatches: boolean) {
-  // Update the same object the effect reads from:
   if (currentMQ) currentMQ.matches = toMatches;
-  // Notify listeners:
+
   listeners.forEach((cb) =>
     cb?.({ matches: toMatches } as unknown as MediaQueryListEvent)
   );
