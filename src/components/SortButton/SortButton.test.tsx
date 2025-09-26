@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import SortButton, { SortOption, SortValue } from "./SortButton";
 
-// Mock CSS module for stable class names
+// Mock CSS module
 jest.mock("./SortButton.module.css", () => ({
   wrap: "wrap",
   button: "button",

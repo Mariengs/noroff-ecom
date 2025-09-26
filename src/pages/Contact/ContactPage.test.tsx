@@ -59,9 +59,9 @@ describe("ContactPage", () => {
     ).not.toBeInTheDocument();
 
     const message = screen.getByLabelText(/message/i);
-    await user.type(message, "short");
+    await user.type(message, "hi");
     expect(
-      await screen.findByText(/message must be at least 10 characters/i)
+      await screen.findByText(/message must be at least 3 characters/i)
     ).toBeInTheDocument();
     await user.clear(message);
     await user.type(message, "This is a valid message.");

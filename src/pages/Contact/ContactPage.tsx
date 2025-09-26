@@ -1,6 +1,6 @@
 import { useId, useState, useEffect, useRef } from "react";
 import { useToast } from "../../components/Toast/ToastProvider";
-import s from "./ContactPage.module.css";
+import styles from "./ContactPage.module.css";
 
 type FormValues = {
   fullName: string;
@@ -23,8 +23,8 @@ function validate(v: FormValues): FormErrors {
     e.subject = "Subject must be at least 3 characters.";
   if (!v.email || !isEmail(v.email))
     e.email = "Please enter a valid email address.";
-  if (!v.body || v.body.trim().length < 10)
-    e.body = "Message must be at least 10 characters.";
+  if (!v.body || v.body.trim().length < 3)
+    e.body = "Message must be at least 3 characters.";
   return e;
 }
 
@@ -93,44 +93,44 @@ export default function ContactPage() {
   }
 
   return (
-    <section className={`${s.section} ${sent ? s.sent : ""}`}>
+    <section className={`${styles.section} ${sent ? styles.sent : ""}`}>
       <div
         ref={topRef}
         tabIndex={-1}
-        className={s.topAnchor}
+        className={styles.topAnchor}
         data-testid="topAnchor"
       />
 
-      <div className={s.wrap}>
-        <h1 className={s.title}>Contact</h1>
+      <div className={styles.wrap}>
+        <h1 className={styles.title}>Contact</h1>
 
         {sent ? (
           <div
-            className={s.success}
+            className={styles.success}
             role="status"
             aria-live="polite"
             aria-atomic="true"
           >
             <h2>Thanks! We received your message.</h2>
-            <p className={s.helper}>
+            <p className={styles.helper}>
               We’ll get back to you at <strong>{values.email}</strong>.
             </p>
           </div>
         ) : (
-          <div className={s.card}>
-            <form className={s.form} noValidate>
+          <div className={styles.card}>
+            <form className={styles.form} noValidate>
               {/* Full name */}
-              <div className={s.row}>
-                <label className={s.label} htmlFor={`${id}-fullName`}>
+              <div className={styles.row}>
+                <label className={styles.label} htmlFor={`${id}-fullName`}>
                   Full name{" "}
-                  <span className={s.required} aria-hidden="true">
+                  <span className={styles.required} aria-hidden="true">
                     *
                   </span>
                 </label>
                 <input
                   id={`${id}-fullName`}
-                  className={`${s.input} ${
-                    errors.fullName ? s.inputError : ""
+                  className={`${styles.input} ${
+                    errors.fullName ? styles.inputError : ""
                   }`}
                   name="fullName"
                   value={values.fullName}
@@ -147,7 +147,7 @@ export default function ContactPage() {
                   <small
                     id={`${id}-fullName-err`}
                     role="alert"
-                    className={s.errorText}
+                    className={styles.errorText}
                   >
                     {errors.fullName}
                   </small>
@@ -155,16 +155,18 @@ export default function ContactPage() {
               </div>
 
               {/* Subject */}
-              <div className={s.row}>
-                <label className={s.label} htmlFor={`${id}-subject`}>
+              <div className={styles.row}>
+                <label className={styles.label} htmlFor={`${id}-subject`}>
                   Subject{" "}
-                  <span className={s.required} aria-hidden="true">
+                  <span className={styles.required} aria-hidden="true">
                     *
                   </span>
                 </label>
                 <input
                   id={`${id}-subject`}
-                  className={`${s.input} ${errors.subject ? s.inputError : ""}`}
+                  className={`${styles.input} ${
+                    errors.subject ? styles.inputError : ""
+                  }`}
                   name="subject"
                   value={values.subject}
                   onChange={handleChange}
@@ -179,7 +181,7 @@ export default function ContactPage() {
                   <small
                     id={`${id}-subject-err`}
                     role="alert"
-                    className={s.errorText}
+                    className={styles.errorText}
                   >
                     {errors.subject}
                   </small>
@@ -187,16 +189,18 @@ export default function ContactPage() {
               </div>
 
               {/* Email */}
-              <div className={s.row}>
-                <label className={s.label} htmlFor={`${id}-email`}>
+              <div className={styles.row}>
+                <label className={styles.label} htmlFor={`${id}-email`}>
                   Email{" "}
-                  <span className={s.required} aria-hidden="true">
+                  <span className={styles.required} aria-hidden="true">
                     *
                   </span>
                 </label>
                 <input
                   id={`${id}-email`}
-                  className={`${s.input} ${errors.email ? s.inputError : ""}`}
+                  className={`${styles.input} ${
+                    errors.email ? styles.inputError : ""
+                  }`}
                   name="email"
                   type="email"
                   value={values.email}
@@ -213,29 +217,33 @@ export default function ContactPage() {
                   <small
                     id={`${id}-email-err`}
                     role="alert"
-                    className={s.errorText}
+                    className={styles.errorText}
                   >
                     {errors.email}
                   </small>
                 )}
-                <span className={s.helper}>We’ll only use this to reply.</span>
+                <span className={styles.helper}>
+                  We’ll only use this to reply.
+                </span>
               </div>
 
               {/* Message */}
-              <div className={s.row}>
-                <label className={s.label} htmlFor={`${id}-body`}>
+              <div className={styles.row}>
+                <label className={styles.label} htmlFor={`${id}-body`}>
                   Message{" "}
-                  <span className={s.required} aria-hidden="true">
+                  <span className={styles.required} aria-hidden="true">
                     *
                   </span>
                 </label>
                 <textarea
                   id={`${id}-body`}
-                  className={`${s.textarea} ${errors.body ? s.inputError : ""}`}
+                  className={`${styles.textarea} ${
+                    errors.body ? styles.inputError : ""
+                  }`}
                   name="body"
                   value={values.body}
                   onChange={handleChange}
-                  minLength={10}
+                  minLength={3}
                   required
                   aria-invalid={Boolean(errors.body)}
                   aria-describedby={errors.body ? `${id}-body-err` : undefined}
@@ -244,7 +252,7 @@ export default function ContactPage() {
                   <small
                     id={`${id}-body-err`}
                     role="alert"
-                    className={s.errorText}
+                    className={styles.errorText}
                   >
                     {errors.body}
                   </small>
@@ -252,10 +260,12 @@ export default function ContactPage() {
               </div>
 
               {/* Actions */}
-              <div className={s.actions}>
+              <div className={styles.actions}>
                 <button
                   type="button"
-                  className={`${s.btn} ${!canSubmit ? s.btnDisabled : ""}`}
+                  className={`${styles.btn} ${
+                    !canSubmit ? styles.btnDisabled : ""
+                  }`}
                   onClick={handleTrySubmit}
                   aria-disabled={!canSubmit}
                 >
