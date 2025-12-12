@@ -76,7 +76,7 @@ export default function SearchBar({ value, onChange, results = [] }: Props) {
 
         <input
           className={styles.input}
-          placeholder="Search productsâ€¦"
+          placeholder="Search products…"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
