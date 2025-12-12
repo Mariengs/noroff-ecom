@@ -1,6 +1,6 @@
 export function formatNOK(amount: number): string {
   try {
-    if (!Number.isFinite(amount)) return "–";
+    if (!Number.isFinite(amount)) return "â€“";
     return new Intl.NumberFormat("no-NO", {
       style: "currency",
       currency: "NOK",
@@ -17,7 +17,8 @@ export function discountPercent(
   if (
     !Number.isFinite(price) ||
     price <= 0 ||
-    discountedPrice == null ||
+    discountedPrice === null ||
+    discountedPrice === undefined ||
     !Number.isFinite(discountedPrice)
   ) {
     return 0;

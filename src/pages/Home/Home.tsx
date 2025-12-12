@@ -123,10 +123,10 @@ export default function Home() {
     return (
       <section className="container--narrow">
         <Title as="h1" />
-        <p className="home-subtitle">Loading products…⏳</p>
+        <p className="home-subtitle">Loading productsâ€¦â³</p>
         <div className="grid--products">
           {Array.from({ length: 12 }).map((_, i) => (
-            <ProductCardSkeleton key={i} />
+            <ProductCardSkeleton key={`skeleton-${i}`} />
           ))}
         </div>
       </section>
@@ -138,7 +138,7 @@ export default function Home() {
       <section className="container--narrow">
         <Title as="h1" />
         <div role="alert" style={{ marginTop: "0.5rem" }}>
-          <p style={{ margin: 0 }}>Couldn’t load products.</p>
+          <p style={{ margin: 0 }}>Couldnâ€™t load products.</p>
           <small style={{ color: "#666" }}>{error}</small>
         </div>
         <button
@@ -157,7 +157,7 @@ export default function Home() {
       <section className="container--narrow">
         <Title as="h1" />
         <p className="home-subtitle">
-          No products matched your search. Try something else 🌸
+          No products matched your search. Try something else ðŸŒ¸
         </p>
         <SearchBar value={query} onChange={setQuery} results={[]} />
       </section>

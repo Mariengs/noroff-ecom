@@ -7,6 +7,12 @@ import CheckoutPage from "./pages/Checkout/CheckoutPage";
 import CheckoutSuccessPage from "./pages/CheckoutSuccess/CheckoutSuccessPage";
 import ContactPage from "./pages/Contact/ContactPage";
 
+/**
+ * Main application component that sets up routing and layout structure.
+ * Renders the app within a Layout wrapper and includes route definitions
+ * for all major pages (Home, Product, Checkout, Success, Contact).
+ * @returns {JSX.Element} The root application component with routing configured
+ */
 export default function App() {
   return (
     <Layout>

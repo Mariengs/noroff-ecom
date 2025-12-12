@@ -19,6 +19,7 @@ export default function CartIcon() {
       prevQty.current = totalQty;
       return () => clearTimeout(t);
     }
+    return undefined;
   }, [totalQty]);
 
   useEffect(() => {

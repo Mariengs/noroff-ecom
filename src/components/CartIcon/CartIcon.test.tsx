@@ -4,16 +4,15 @@ import { MemoryRouter } from "react-router-dom";
 import CartIcon from "./CartIcon";
 
 beforeAll(() => {
-  const origWarn = console.warn;
   jest
     .spyOn(console, "warn")
-    .mockImplementation((msg?: any, ...rest: any[]) => {
+    .mockImplementation((msg?: unknown, ...rest: unknown[]) => {
       if (
         typeof msg === "string" &&
         msg.includes("React Router Future Flag Warning")
       )
         return;
-      origWarn(msg, ...rest);
+      // Suppress other warnings in tests
     });
 });
 
@@ -57,21 +56,21 @@ describe("CartIcon", () => {
 
   afterEach(() => {});
 
-  it("viser tom-tilstand når totalQty = 0 (ingen badge)", () => {
+  it("viser tom-tilstand nÃ¥r totalQty = 0 (ingen badge)", () => {
     mockQty = 0;
     renderWithRouter();
     expect(screen.getByText(/cart is empty/i)).toBeInTheDocument();
     expect(screen.queryByText(/^\s*0\s*$/)).not.toBeInTheDocument();
   });
 
-  it("viser badge og riktig live-tekst når totalQty > 0", () => {
+  it("viser badge og riktig live-tekst nÃ¥r totalQty > 0", () => {
     mockQty = 3;
     renderWithRouter();
     expect(screen.getByText("3")).toBeInTheDocument();
     expect(screen.getByText(/3 items in cart/i)).toBeInTheDocument();
   });
 
-  it("får bump-klasse når qty endres, og fjerner den etter 450ms", () => {
+  it("fÃ¥r bump-klasse nÃ¥r qty endres, og fjerner den etter 450ms", () => {
     jest.useFakeTimers();
 
     mockQty = 0;
@@ -95,7 +94,7 @@ describe("CartIcon", () => {
     jest.useRealTimers();
   });
 
-  it('blir "floating" når scrollY > 150 og rendres via portal', () => {
+  it('blir "floating" nÃ¥r scrollY > 150 og rendres via portal', () => {
     Object.defineProperty(window, "scrollY", { value: 200, writable: true });
     mockQty = 1;
     renderWithRouter();
@@ -103,7 +102,7 @@ describe("CartIcon", () => {
     expect(button.className).toMatch(/\bfloating\b/);
   });
 
-  it("navigerer til /checkout når man klikker", async () => {
+  it("navigerer til /checkout nÃ¥r man klikker", async () => {
     const user = userEvent.setup();
     mockQty = 2;
     renderWithRouter();

@@ -22,7 +22,7 @@ export default function CheckoutSuccessPage() {
       cleared.current = true;
     }
 
-    toast.success("Checkout complete — thanks for your order!", {
+    toast.success("Checkout complete – thanks for your order!", {
       duration: 3000,
       action: {
         label: "Back to store",

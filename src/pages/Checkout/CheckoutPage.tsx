@@ -96,7 +96,7 @@ export default function CheckoutPage() {
                           const snapshot = { ...i };
                           dec(i.id);
                           if (snapshot.qty > 1) {
-                            toast.info(`Removed 1 × ${snapshot.title}`, {
+                            toast.info(`Removed 1 Ã— ${snapshot.title}`, {
                               duration: 3000,
                               action: {
                                 label: "Undo",
@@ -115,7 +115,7 @@ export default function CheckoutPage() {
                         }}
                         aria-label={`Decrease quantity of ${i.title}`}
                       >
-                        −
+                        ↙
                       </button>
 
                       <span className={styles.qtyValue} aria-live="polite">
@@ -127,7 +127,7 @@ export default function CheckoutPage() {
                         className={styles.qtyBtn}
                         onClick={() => {
                           inc(i.id);
-                          toast.success(`Added 1 × ${i.title}`, {
+                          toast.success(`Added 1 Ã— ${i.title}`, {
                             duration: 2500,
                             action: {
                               label: "Undo",

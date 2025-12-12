@@ -76,7 +76,7 @@ export default function SearchBar({ value, onChange, results = [] }: Props) {
 
         <input
           className={styles.input}
-          placeholder="Search products…"
+          placeholder="Search productsâ€¦"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -145,7 +145,7 @@ export default function SearchBar({ value, onChange, results = [] }: Props) {
                   />
                 ) : (
                   <div className={styles.thumbFallback} aria-hidden={true}>
-                    🛍️
+                    ðŸ›ï¸
                   </div>
                 )}
                 <div className={styles.meta}>

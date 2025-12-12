@@ -15,6 +15,7 @@ function readInitialMode(): Mode {
     if (saved === "light" || saved === "dark") return saved;
     return systemPrefersDark() ? "dark" : "light";
   } catch {
+    // localStorage might be unavailable (e.g., private browsing mode)
     return "light";
   }
 }
@@ -26,7 +27,9 @@ export default function ThemeToggle() {
     document.documentElement.setAttribute("data-theme", mode);
     try {
       localStorage.setItem("theme", mode);
-    } catch {}
+    } catch {
+      // Silently ignore localStorage errors (e.g., quota exceeded, private mode)
+    }
   }, [mode]);
 
   useEffect(() => {

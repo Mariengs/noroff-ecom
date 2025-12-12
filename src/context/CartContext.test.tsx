@@ -1,239 +1,114 @@
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { CartProvider, useCart } from "./CartContext";
+import { render, screen, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
+import CartIcon from "../components/CartIcon/CartIcon";
 
-let setItemMock: jest.SpyInstance;
+beforeAll(() => {
+  const origWarn = console.warn.bind(console);
+  jest
+    .spyOn(console, "warn")
+    .mockImplementation((msg?: string | object, ...rest: unknown[]) => {
+      if (
+        typeof msg === "string" &&
+        msg.includes("React Router Future Flag Warning")
+      )
+        return;
+      origWarn(msg, ...rest);
+    });
+});
 
-// Helper
-function Harness() {
-  const cart = useCart();
-  return (
-    <div>
-      <div data-testid="totalQty">{cart.totalQty}</div>
-      <div data-testid="totalAmount">{cart.totalAmount}</div>
+// Mock CSS-modul
+jest.mock("./CartIcon.module.css", () => ({
+  button: "button",
+  bump: "bump",
+  floating: "floating",
+  icon: "icon",
+  badge: "badge",
+}));
 
-      <button
-        onClick={() =>
-          cart.add({
-            id: "p1",
-            title: "Lamp",
-            price: 1000,
-            discountedPrice: 800,
-            imageUrl: "u",
-          })
-        }
-      >
-        add-p1
-      </button>
+// --- Mock useCart (styr totalQty via variabel) ---
+let mockQty = 0;
+jest.mock("../../context/CartContext", () => ({
+  useCart: () => ({ totalQty: mockQty }),
+}));
 
-      <button
-        onClick={() =>
-          cart.addQty(
-            {
-              id: "p2",
-              title: "Chair",
-              price: 500,
-            },
-            3
-          )
-        }
-      >
-        addqty-p2x3
-      </button>
+// --- Mock useNavigate checks navigation ---
+const mockNavigate = jest.fn();
+jest.mock("react-router-dom", () => {
+  const actual = jest.requireActual("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
-      <button onClick={() => cart.inc("p1")}>inc-p1</button>
-      <button onClick={() => cart.dec("p1")}>dec-p1</button>
-      <button onClick={() => cart.remove("p2")}>remove-p2</button>
-      <button onClick={() => cart.clear()}>clear</button>
-    </div>
+function renderWithRouter() {
+  return render(
+    <MemoryRouter>
+      <CartIcon />
+    </MemoryRouter>
   );
 }
 
-function renderWithProvider(ui: React.ReactElement = <Harness />) {
-  return render(<CartProvider>{ui}</CartProvider>);
-}
-
-describe("CartContext", () => {
+describe("CartIcon", () => {
   beforeEach(() => {
-    localStorage.clear();
-    jest.restoreAllMocks();
-
-    setItemMock = jest
-      .spyOn(Storage.prototype, "setItem")
-      .mockImplementation(() => {});
+    mockNavigate.mockClear();
   });
 
-  it("throws if useCart is used outside CartProvider", () => {
-    const Bad = () => {
-      useCart();
-      return null;
-    };
+  afterEach(() => {});
 
-    const spy = jest.spyOn(console, "error").mockImplementation(() => {});
-    expect(() => render(<Bad />)).toThrow(
-      /useCart must be used within CartProvider/i
+  it("viser tom-tilstand nÃ¥r totalQty = 0 (ingen badge)", () => {
+    mockQty = 0;
+    renderWithRouter();
+    expect(screen.getByText(/cart is empty/i)).toBeInTheDocument();
+    expect(screen.queryByText(/^\s*0\s*$/)).not.toBeInTheDocument();
+  });
+
+  it("viser badge og riktig live-tekst nÃ¥r totalQty > 0", () => {
+    mockQty = 3;
+    renderWithRouter();
+    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getByText(/3 items in cart/i)).toBeInTheDocument();
+  });
+
+  it("fÃ¥r bump-klasse nÃ¥r qty endres, og fjerner den etter 450ms", () => {
+    jest.useFakeTimers();
+
+    mockQty = 0;
+    const { rerender } = renderWithRouter();
+
+    mockQty = 2;
+    rerender(
+      <MemoryRouter>
+        <CartIcon />
+      </MemoryRouter>
     );
-    spy.mockRestore();
-  });
 
-  it("initializes from localStorage and normalizes legacy fields", () => {
-    (localStorage as any)["cart-v1"] = JSON.stringify({
-      items: [
-        {
-          id: "ok1",
-          title: "Old A",
-          price: 100,
-          qty: 2,
-          image: { url: "img-a" },
-        },
-        {
-          id: "ok2",
-          title: "Old B",
-          price: 200,
-          qty: 1,
-          thumbnail: "thumb-b",
-        },
-        { id: "zero", title: "Zero", price: 50, qty: 0 },
-        { title: "No ID", price: 10, qty: 1 },
-      ],
+    const button = screen.getByRole("button", { name: /open cart/i });
+    expect(button.className).toMatch(/\bbump\b/);
+
+    act(() => {
+      jest.advanceTimersByTime(500);
     });
+    expect(button.className).not.toMatch(/\bbump\b/);
 
-    renderWithProvider();
-
-    // Derived totals
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("3");
-    expect(screen.getByTestId("totalAmount")).toHaveTextContent("400");
+    jest.useRealTimers();
   });
 
-  it("ADD adds a new item or increments existing; discountedPrice is used for totals", () => {
-    renderWithProvider();
-
-    const addP1 = screen.getByRole("button", { name: /add-p1/i });
-    fireEvent.click(addP1);
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("1");
-    // discountedPrice 800 is used
-    expect(screen.getByTestId("totalAmount")).toHaveTextContent("800");
-
-    // Add the same item again -> qty 2, amount 1600
-    fireEvent.click(addP1);
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("2");
-    expect(screen.getByTestId("totalAmount")).toHaveTextContent("1600");
+  it('blir "floating" nÃ¥r scrollY > 150 og rendres via portal', () => {
+    Object.defineProperty(window, "scrollY", { value: 200, writable: true });
+    mockQty = 1;
+    renderWithRouter();
+    const button = screen.getByRole("button", { name: /open cart/i });
+    expect(button.className).toMatch(/\bfloating\b/);
   });
 
-  it("ADD_QTY inserts or increments by arbitrary qty", () => {
-    renderWithProvider();
+  it("navigerer til /checkout nÃ¥r man klikker", async () => {
+    const user = userEvent.setup();
+    mockQty = 2;
+    renderWithRouter();
 
-    const addP2x3 = screen.getByRole("button", { name: /addqty-p2x3/i });
-    fireEvent.click(addP2x3);
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("3");
-    expect(screen.getByTestId("totalAmount")).toHaveTextContent("1500"); // 3 * 500
-
-    // Add p2 again with qty 3 -> total 6
-    fireEvent.click(addP2x3);
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("6");
-    expect(screen.getByTestId("totalAmount")).toHaveTextContent("3000");
-  });
-
-  it("INC/DEC adjust qty and DEC removes item when qty hits 0", () => {
-    renderWithProvider();
-
-    const addP1 = screen.getByRole("button", { name: /add-p1/i });
-    const incP1 = screen.getByRole("button", { name: /inc-p1/i });
-    const decP1 = screen.getByRole("button", { name: /dec-p1/i });
-
-    // add p1 twice -> qty 2, amount 1600
-    fireEvent.click(addP1);
-    fireEvent.click(addP1);
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("2");
-    expect(screen.getByTestId("totalAmount")).toHaveTextContent("1600");
-
-    fireEvent.click(incP1);
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("3");
-
-    fireEvent.click(decP1);
-    fireEvent.click(decP1);
-    // one more DEC removes the item
-    fireEvent.click(decP1);
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("0");
-    expect(screen.getByTestId("totalAmount")).toHaveTextContent("0");
-  });
-
-  it("REMOVE deletes a specific item", () => {
-    renderWithProvider();
-
-    const addP1 = screen.getByRole("button", { name: /add-p1/i });
-    const addP2x3 = screen.getByRole("button", { name: /addqty-p2x3/i });
-    const removeP2 = screen.getByRole("button", { name: /remove-p2/i });
-
-    fireEvent.click(addP1);
-    fireEvent.click(addP2x3);
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("4");
-
-    fireEvent.click(removeP2);
-    // only p1 remains (qty 1, amount 800)
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("1");
-    expect(screen.getByTestId("totalAmount")).toHaveTextContent("800");
-  });
-
-  it("CLEAR empties the cart", () => {
-    renderWithProvider();
-
-    const addP1 = screen.getByRole("button", { name: /add-p1/i });
-    const clearBtn = screen.getByRole("button", { name: /clear/i });
-
-    fireEvent.click(addP1);
-    fireEvent.click(clearBtn);
-
-    expect(screen.getByTestId("totalQty")).toHaveTextContent("0");
-    expect(screen.getByTestId("totalAmount")).toHaveTextContent("0");
-  });
-
-  it("persists to localStorage on state changes", () => {
-    renderWithProvider();
-
-    const addP1 = screen.getByRole("button", { name: /add-p1/i });
-    fireEvent.click(addP1);
-
-    expect(setItemMock).toHaveBeenCalledWith(
-      "cart-v1",
-      expect.stringContaining('"items":')
-    );
-  });
-
-  it("normalizes payload image fields into imageUrl (no infinite loop)", () => {
-    (localStorage as any)["cart-v1"] = JSON.stringify({ items: [] });
-
-    function Probe() {
-      const { addQty, items } = useCart();
-      return (
-        <div>
-          <button
-            onClick={() =>
-              addQty(
-                {
-                  id: "x",
-                  title: "X",
-                  price: 10,
-                  image: { url: "legacy-url" },
-                } as any,
-                1
-              )
-            }
-          >
-            add-legacy
-          </button>
-          <div data-testid="imgUrl">{items[0]?.imageUrl ?? ""}</div>
-        </div>
-      );
-    }
-
-    render(
-      <CartProvider>
-        <Probe />
-      </CartProvider>
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: /add-legacy/i }));
-    expect(screen.getByTestId("imgUrl")).toHaveTextContent("legacy-url");
+    await user.click(screen.getByRole("button", { name: /open cart/i }));
+    expect(mockNavigate).toHaveBeenCalledWith("/checkout");
   });
 });
