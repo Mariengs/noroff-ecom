@@ -157,7 +157,7 @@ export default function Home() {
       <section className="container--narrow">
         <Title as="h1" />
         <p className="home-subtitle">
-          No products matched your search. Try something else¸
+          No products matched your search. Try something else.
         </p>
         <SearchBar value={query} onChange={setQuery} results={[]} />
       </section>
